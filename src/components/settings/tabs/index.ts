@@ -10,6 +10,7 @@ export { default as AddonsTab } from "./addons";
 export * from "./BaseTab";
 export { default as ChangelogTab } from "./changelog";
 export { default as PatchHelperTab } from "./patchHelper";
+export { default as PerformanceTab } from "./performance";
 export { default as PluginsTab } from "./plugins";
 export { openContributorModal } from "./plugins/ContributorModal";
 export { openPluginModal } from "./plugins/PluginModal";

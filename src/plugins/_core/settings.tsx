@@ -5,10 +5,11 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { CloudIcon, MainSettingsIcon, PatchHelperIcon, PluginsIcon, UpdaterIcon } from "@components/Icons";
+import { CloudIcon, FireIcon, MainSettingsIcon, PatchHelperIcon, PluginsIcon, UpdaterIcon } from "@components/Icons";
 import {
     AddonsTab,
     PatchHelperTab,
+    PerformanceTab,
     SyncTab,
     UpdatesTab,
     VencordTab,
@@ -125,6 +126,7 @@ export default definePlugin({
     authors: [Devs.Ven, Devs.Megu],
     tags: ["Utility"],
     required: true,
+    dependencies: ["UserSettingsAPI"],
 
     settings,
 
@@ -259,6 +261,12 @@ export default definePlugin({
                 panelTitle: "EnderCord Updates",
                 Component: UpdatesTab,
                 Icon: UpdaterIcon
+            }),
+            buildEntry({
+                key: "equicord_performance",
+                title: "Performance",
+                Component: PerformanceTab,
+                Icon: FireIcon
             }),
             buildEntry({
                 key: "equicord_cloud",

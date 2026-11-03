@@ -95,6 +95,7 @@ export default {
         supportsWindowsMaterial: () => sendSync<boolean>(IpcEvents.SUPPORTS_WINDOWS_MATERIAL),
         openExternal: (url: string) => invoke<void>(IpcEvents.OPEN_EXTERNAL, url),
         getRendererCss: () => invoke<string>(IpcEvents.GET_RENDERER_CSS),
+        getProcessMetrics: () => invoke<{ pid: number; type: string; name: string; memoryKb: number; cpu: number; }[]>(IpcEvents.GET_PROCESS_METRICS),
         onRendererCssUpdate: (cb: (newCss: string) => void) => {
             if (!IS_DEV) return;
 

@@ -207,6 +207,14 @@ if (IS_DISCORD_DESKTOP) {
     });
 }
 
+ipcMain.handle(IpcEvents.GET_PROCESS_METRICS, () => app.getAppMetrics().map(m => ({
+    pid: m.pid,
+    type: m.type,
+    name: m.serviceName || m.name || m.type,
+    memoryKb: m.memory.workingSetSize,
+    cpu: m.cpu.percentCPUUsage,
+})));
+
 ipcMain.on(IpcEvents.SUPPORTS_WINDOWS_MATERIAL, e => {
     e.returnValue = process.platform === "win32" && Number(release().split(".")[2]) >= 22621;
 });

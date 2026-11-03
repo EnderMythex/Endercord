@@ -1,0 +1,49 @@
+.vc-perf-total {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-strong, var(--header-primary));
+}
+
+.vc-perf-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 32px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-default);
+}
+
+.vc-perf-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-perf-bar {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--background-modifier-accent);
+    overflow: hidden;
+}
+
+.vc-perf-fill {
+    height: 100%;
+    background: var(--brand-500);
+}
+
+.vc-perf-value {
+    width: 80px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.vc-perf-cpu {
+    width: 80px;
+    text-align: right;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+}
