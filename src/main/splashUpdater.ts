@@ -84,9 +84,11 @@ export function initSplashUpdater() {
 
                 writeFileSync(__dirname, asar, { flush: true });
                 show("EnderCord updated, restarting...", 1);
+                // Quit gracefully: Discord only saves your login token back when its window closes normally,
+                // so a hard exit here would log you out.
                 setTimeout(() => {
                     app.relaunch();
-                    app.exit(0);
+                    app.quit();
                 }, 800);
             } catch (err) {
                 console.error("[EnderCord] Splash update failed", err);

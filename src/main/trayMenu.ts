@@ -103,8 +103,9 @@ function createVencordMenuItems(): MenuItemConstructorOptions[] {
                             }
 
                             await notify(window, "Update Successful", "Now relaunching EnderCord to apply the update.");
+                            // app.exit() skips closing the window normally, which logs you out of Discord
                             app.relaunch();
-                            app.exit();
+                            app.quit();
                         } catch (e) {
                             notify(window, "Update Error", `An error occurred while updating EnderCord.\n\n${String(e)}`);
                         }
