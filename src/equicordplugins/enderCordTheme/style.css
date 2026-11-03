@@ -5,12 +5,10 @@
 }
 
 /* Translucent surfaces, from the frame (most see through) to popouts (almost solid) */
-.vc-ender-theme.theme-dark,
-.vc-ender-theme .theme-dark,
-.vc-ender-theme.theme-darker,
-.vc-ender-theme .theme-darker,
-.vc-ender-theme.theme-midnight,
-.vc-ender-theme .theme-midnight {
+
+/* Doubled class so these beat Discord's own theme rules, which can load after ours with the same specificity */
+.vc-ender-theme.vc-ender-theme:is(.theme-dark, .theme-darker, .theme-midnight),
+.vc-ender-theme.vc-ender-theme :is(.theme-dark, .theme-darker, .theme-midnight) {
     --vc-ender-frame: rgb(6 6 8 / calc(var(--vc-ender-alpha) * .55));
     --vc-ender-sidebar: rgb(10 10 12 / calc(var(--vc-ender-alpha) * .7));
     --vc-ender-chat: rgb(14 14 17 / calc(var(--vc-ender-alpha) * .8));
@@ -46,7 +44,7 @@
     --border-subtle: rgb(255 255 255 / 6%);
 }
 
-.vc-ender-theme #app-mount {
+.vc-ender-theme.vc-ender-theme #app-mount {
     background: rgb(5 5 6 / var(--vc-ender-alpha));
     isolation: isolate;
 }

@@ -6,15 +6,28 @@
 
 import { VENCORD_USER_AGENT } from "@shared/vencordUserAgent";
 import { app } from "electron";
-import { writeFileSync } from "original-fs";
+import { appendFileSync, writeFileSync } from "original-fs";
+import { join } from "path";
 
 import gitHash from "~git-hash";
 import gitRemote from "~git-remote";
 
 import { ASAR_FILE } from "./updater/common";
+import { DATA_DIR } from "./utils/constants";
 import { checkedFetch, fetchJson } from "./utils/http";
 
 const headers = { "User-Agent": VENCORD_USER_AGENT };
+
+// Discord's main process logs are hard to reach, so the splash steps also go to a small file in EnderCord's data folder.
+const LOG_FILE = join(DATA_DIR, "endercord-main.log");
+function log(...parts: unknown[]) {
+    const line = `${new Date().toISOString()} ${parts.join(" ")}\n`;
+    try {
+        appendFileSync(LOG_FILE, line);
+    } catch (err) {
+        console.error("[EnderCord] Failed to write", LOG_FILE, err);
+    }
+}
 
 interface Release {
     name: string;
@@ -150,23 +163,36 @@ export function initSplash(theme: boolean, update: boolean) {
         : Promise.resolve(null);
     let started = false;
 
+    try {
+        writeFileSync(LOG_FILE, "");
+    } catch (err) {
+        console.error("[EnderCord] Failed to reset", LOG_FILE, err);
+    }
+    log("initSplash theme:", theme, "update:", update);
+    let windows = 0;
+
     app.on("browser-window-created", (_, win) => {
+        const index = windows++;
         win.webContents.on("did-finish-load", async () => {
-            if (started || !/splash/i.test(win.webContents.getURL())) return;
+            const url = win.webContents.getURL();
+            log("window", index, "loaded", url);
+            // Discord opens its startup screen first, from a local file rather than discord.com
+            if (started || !(/splash/i.test(url) || (index === 0 && !url.startsWith("http")))) return;
             started = true;
 
             const run = (code: string) => {
                 if (win.isDestroyed()) return;
-                win.webContents.executeJavaScript(code).catch(err => console.error("[EnderCord] Failed to update the splash screen", err));
+                win.webContents.executeJavaScript(code).then(() => log("splash script ran"), err => log("splash script failed:", err));
             };
             const show = (text: string, progress: number) => run(`(${RENDER_PROGRESS})(${JSON.stringify(text)}, ${progress})`);
 
-            console.log("[EnderCord] Found the splash screen at", win.webContents.getURL());
-            win.webContents.insertCSS(SPLASH_CSS).catch(err => console.error("[EnderCord] Failed to style the splash screen", err));
+            log("theming splash screen", url);
+            win.webContents.insertCSS(SPLASH_CSS).then(() => log("splash css inserted"), err => log("insertCSS failed:", err));
             if (theme) run(`(${APPLY_THEME})()`);
 
             try {
                 const data = await release;
+                log("running", gitHash, "latest release", data?.name ?? "none");
                 if (!data) return;
                 const asset = data.assets.find(a => a.name === ASAR_FILE);
                 if (data.name.slice(data.name.lastIndexOf(" ") + 1) === gitHash || !asset) return;
