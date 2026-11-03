@@ -19,6 +19,7 @@
 import "./updater";
 import "./ipcPlugins";
 import "./settings";
+import "./runtimePlugins";
 import "./userPlugins";
 
 import { debounce } from "@shared/debounce";

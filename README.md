@@ -4,7 +4,10 @@ EnderCord is a personal fork of [PawsomeVencord](https://github.com/enzomtpYT/Pa
 
 ## Making your own plugins
 
-Open Discord settings, go to **EnderCord Settings > My Plugins** and type a name to create a plugin. It lands in `src/userplugins/<name>/index.tsx`. Edit that file, then click **Rebuild and Restart** (or run `pnpm build`) to load it. This tab only shows up when EnderCord runs from a source checkout, not from the standalone installer.
+Open Discord settings, go to **EnderCord Settings > My Plugins**.
+
+- **Quick plugins** work everywhere, including installs made with the installer. Type a name and click Create: a JavaScript file appears in your plugins folder (`Equicord/plugins` in your config folder). Edit it in any text editor, then click **Reload Discord** (or press Ctrl+R). No rebuild needed. The file explains which EnderCord APIs it can use.
+- **Compiled plugins** are TypeScript plugins in `src/userplugins/<name>/index.tsx`, built together with EnderCord. They need the source version (`pnpm build` + `pnpm inject`) and a rebuild after each change.
 
 ## Note, this is an unofficial fork of equicord. This repo might be behind the main repo at times.
 

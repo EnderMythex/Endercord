@@ -59,6 +59,12 @@ export default {
         build: () => invoke<IpcRes<void>>(IpcEvents.BUILD_USERPLUGINS),
     },
 
+    runtimePlugins: {
+        get: () => sendSync<{ file: string; code: string; }[]>(IpcEvents.GET_RUNTIME_PLUGINS),
+        openFolder: () => invoke<void>(IpcEvents.OPEN_RUNTIME_PLUGINS_FOLDER),
+        create: (name: string) => invoke<IpcRes<void>>(IpcEvents.CREATE_RUNTIME_PLUGIN, name),
+    },
+
     settings: {
         get: () => sendSync<Settings>(IpcEvents.GET_SETTINGS),
         set: (settings: Settings, pathToNotify?: string) => invoke<void>(IpcEvents.SET_SETTINGS, settings, pathToNotify),
