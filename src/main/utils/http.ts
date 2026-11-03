@@ -68,3 +68,21 @@ export async function downloadToFile(url: Url, path: string, options?: RequestIn
     const body = Readable.fromWeb(res.body);
     await finished(body.pipe(createWriteStream(path)));
 }
+
+/** Downloads into memory, reporting progress from 0 to 1 when the server sends a size. */
+export async function fetchBufferWithProgress(url: Url, onProgress: (progress: number) => void, options?: RequestInit) {
+    const res = await checkedFetch(url, options);
+    if (!res.body) throw new Error(`Download ${url}: response body is empty`);
+
+    const total = Number(res.headers.get("content-length")) || 0;
+    const chunks: Uint8Array[] = [];
+    let received = 0;
+
+    const reader = res.body.getReader();
+    for (let r = await reader.read(); !r.done; r = await reader.read()) {
+        chunks.push(r.value);
+        received += r.value.length;
+        if (total) onProgress(received / total);
+    }
+    return Buffer.concat(chunks);
+}

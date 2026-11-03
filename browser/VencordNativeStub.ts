@@ -78,6 +78,7 @@ window.VencordNative = {
         getUpdates: async () => ({ ok: true, value: [] }),
         fetchUpdate: async () => ({ ok: true, value: false }),
         applyUpdate: async () => ({ ok: true, value: true }),
+        onProgress: () => () => { },
     },
 
     userPlugins: {

@@ -14,7 +14,7 @@ import gitRemote from "~git-remote";
 
 import { ASAR_FILE } from "./updater/common";
 import { DATA_DIR } from "./utils/constants";
-import { checkedFetch, fetchJson } from "./utils/http";
+import { fetchBufferWithProgress, fetchJson } from "./utils/http";
 
 const headers = { "User-Agent": VENCORD_USER_AGENT };
 
@@ -136,23 +136,6 @@ const RENDER_PROGRESS = `(text, progress) => {
     bar.querySelector(".fill").style.width = Math.round(progress * 100) + "%";
 }`;
 
-async function download(url: string, onProgress: (progress: number) => void) {
-    const res = await checkedFetch(url, { headers });
-    if (!res.body) throw new Error("Empty response");
-
-    const total = Number(res.headers.get("content-length")) || 0;
-    const chunks: Uint8Array[] = [];
-    let received = 0;
-
-    const reader = res.body.getReader();
-    for (let r = await reader.read(); !r.done; r = await reader.read()) {
-        chunks.push(r.value);
-        received += r.value.length;
-        if (total) onProgress(received / total);
-    }
-    return Buffer.concat(chunks);
-}
-
 /**
  * Themes Discord's splash screen, and when `update` is set, downloads EnderCord updates while it's up with a progress
  * bar on it, then restarts Discord on the new version before the main window ever loads the old one.
@@ -212,7 +195,7 @@ export function initSplash(theme: boolean, update: boolean) {
                 if (data.name.slice(data.name.lastIndexOf(" ") + 1) === gitHash || !asset) return;
 
                 show("Updating", 0);
-                const asar = await download(asset.browser_download_url, p => show("Updating", p));
+                const asar = await fetchBufferWithProgress(asset.browser_download_url, p => show("Updating", p), { headers });
 
                 // Once the main window is up it reads from the asar, so leave it to the in app updater.
                 if (win.isDestroyed()) return;

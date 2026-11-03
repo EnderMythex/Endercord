@@ -88,3 +88,70 @@
     from { --vc-ender-sweep: 282deg; }
     to { --vc-ender-sweep: 345deg; }
 }
+
+/* EnderCord's own settings pages, in the same minimal black style */
+.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) {
+    --vc-ender-glass: rgb(255 255 255 / 3%);
+    --vc-ender-glass-hover: rgb(255 255 255 / 6%);
+    --vc-ender-line: rgb(255 255 255 / 8%);
+}
+
+.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) :is(.vc-addon-card, .vc-card-primary, .vc-card-normal, .vc-settings-quickActions-card) {
+    background: var(--vc-ender-glass);
+    border: 1px solid var(--vc-ender-line);
+    border-radius: 14px;
+    box-shadow: none;
+    transition: background .2s ease, border-color .2s ease, transform .2s ease;
+}
+
+.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) .vc-addon-card:hover {
+    background: var(--vc-ender-glass-hover);
+    border-color: rgb(255 255 255 / 16%);
+    transform: translateY(-1px);
+}
+
+.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) .vc-settings-quickActions-pill {
+    background: var(--vc-ender-glass);
+    border: 1px solid var(--vc-ender-line);
+    border-radius: 10px;
+    box-shadow: none;
+}
+
+.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) .vc-settings-quickActions-pill:hover {
+    background: var(--vc-ender-glass-hover);
+    box-shadow: none;
+}
+
+.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) .vc-btn-primary {
+    background: #f5f5f7;
+    color: #0a0a0b;
+    border-radius: 999px;
+}
+
+.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) .vc-btn-primary:hover {
+    background: #fff;
+}
+
+.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) .vc-btn-secondary {
+    background: var(--vc-ender-glass);
+    border-color: var(--vc-ender-line);
+    border-radius: 999px;
+    color: #f5f5f7;
+}
+
+.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) .vc-btn-secondary:hover {
+    background: var(--vc-ender-glass-hover);
+}
+
+/* Section titles in small spaced caps, like macOS settings */
+.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) .vc-h5 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) .vc-settings-tab-bar {
+    border-bottom-color: var(--vc-ender-line);
+}

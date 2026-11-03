@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { fetchBuffer, fetchJson } from "@main/utils/http";
+import { fetchBufferWithProgress, fetchJson } from "@main/utils/http";
 import { VENCORD_USER_AGENT } from "@shared/vencordUserAgent";
 import { writeFileSync } from "original-fs";
 
@@ -24,7 +24,7 @@ import gitHash from "~git-hash";
 import gitRemote from "~git-remote";
 
 import { Updater } from ".";
-import { ASAR_FILE } from "./common";
+import { ASAR_FILE, sendUpdateProgress } from "./common";
 
 const API_BASE = `https://api.github.com/repos/${gitRemote}`;
 let PendingUpdate: string | null = null;
@@ -69,7 +69,9 @@ async function fetchUpdate() {
 async function applyUpdate() {
     if (!PendingUpdate) return true;
 
-    const data = await fetchBuffer(PendingUpdate);
+    sendUpdateProgress("Downloading", 0);
+    const data = await fetchBufferWithProgress(PendingUpdate, p => sendUpdateProgress("Downloading", p));
+    sendUpdateProgress("Installing", 1);
     writeFileSync(__dirname, data, { flush: true });
 
     PendingUpdate = null;

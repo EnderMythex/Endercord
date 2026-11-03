@@ -12,9 +12,10 @@ import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
 import { Span } from "@components/Span";
 import { Margins } from "@utils/margins";
+import { classes } from "@utils/misc";
 import { promptToRestart } from "@utils/promptToRestart";
 import { changes, checkForUpdates, update, updateError } from "@utils/updater";
-import { React, showToast, useState } from "@webpack/common";
+import { React, showToast, useEffect, useState } from "@webpack/common";
 
 import { runWithDispatch } from "./runWithDispatch";
 
@@ -70,6 +71,28 @@ export function Newer(props: CommonProps) {
     );
 }
 
+/** Live download and build progress, sent by the main process while an update runs. */
+function UpdateProgress() {
+    const [{ stage, progress }, setState] = useState({ stage: "Starting", progress: -1 });
+    useEffect(() => VencordNative.updater.onProgress((stage, progress) => setState({ stage, progress })), []);
+
+    const known = progress >= 0;
+    return (
+        <div className="vc-update-progress">
+            <div className="vc-update-progress-label">
+                <span>{stage}</span>
+                {known && <span>{Math.round(progress * 100)}%</span>}
+            </div>
+            <div className="vc-update-progress-track">
+                <div
+                    className={classes("vc-update-progress-fill", !known && "vc-update-progress-indeterminate")}
+                    style={known ? { width: `${progress * 100}%` } : undefined}
+                />
+            </div>
+        </div>
+    );
+}
+
 export function Updatable(props: CommonProps) {
     const [updates, setUpdates] = useState(changes);
     const [isChecking, setIsChecking] = useState(false);
@@ -119,6 +142,7 @@ export function Updatable(props: CommonProps) {
                     </Button>
                 )}
             </Flex>
+            {isUpdating && <UpdateProgress />}
             {!updates && updateError ? (
                 <>
                     <Span size="md" weight="medium" color="text-strong">Error checking for updates</Span>

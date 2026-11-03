@@ -21,6 +21,7 @@ import { join } from "path";
 import { promisify } from "util";
 
 import { Updater } from ".";
+import { sendUpdateProgress } from "./common";
 
 const VENCORD_SRC_DIR = join(__dirname, "..");
 const EQUICORD_DIR = join(__dirname, "../../");
@@ -66,11 +67,13 @@ async function calculateGitChanges() {
 }
 
 async function pull() {
+    sendUpdateProgress("Downloading", -1);
     const res = await git("pull");
     return res.stdout.includes("Fast-forward");
 }
 
 export async function build() {
+    sendUpdateProgress("Building", -1);
     const opts = { cwd: EQUICORD_DIR };
 
     const command = isFlatpak ? "flatpak-spawn" : "node";

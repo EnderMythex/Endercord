@@ -16,6 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { IpcEvents } from "@shared/IpcEvents";
+import { BrowserWindow } from "electron";
+
 export const ASAR_FILE = IS_VESKTOP ? "vesktop.asar" : IS_PAWTOP ? "pawtop.asar" : "desktop.asar";
 
 export function serializeErrors(func: (...args: any[]) => any) {
@@ -38,4 +41,10 @@ export function serializeErrors(func: (...args: any[]) => any) {
             };
         }
     };
+}
+
+/** Tells every window how the update is going. progress is 0 to 1, or -1 when it can't be measured. */
+export function sendUpdateProgress(stage: string, progress: number) {
+    for (const win of BrowserWindow.getAllWindows())
+        win.webContents.send(IpcEvents.UPDATER_PROGRESS, stage, progress);
 }

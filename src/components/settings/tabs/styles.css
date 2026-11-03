@@ -94,6 +94,50 @@
     display: grid;
     gap: 8px;
 }
+
 .vc-userplugins-input {
     flex: 1;
+}
+
+.vc-update-progress {
+    margin: 12px 0 16px;
+    max-width: 420px;
+}
+
+.vc-update-progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.vc-update-progress-track {
+    position: relative;
+    height: 3px;
+    border-radius: 3px;
+    background: rgb(255 255 255 / 10%);
+    overflow: hidden;
+}
+
+.vc-update-progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--text-strong, #fff);
+    box-shadow: 0 0 8px rgb(255 255 255 / 50%);
+    transition: width .3s cubic-bezier(.2, .8, .2, 1);
+}
+
+.vc-update-progress-indeterminate {
+    position: absolute;
+    width: 35%;
+    animation: vc-update-progress-slide 1.2s ease-in-out infinite;
+}
+
+@keyframes vc-update-progress-slide {
+    from { left: -35%; }
+    to { left: 100%; }
 }

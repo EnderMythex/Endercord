@@ -31,6 +31,9 @@ for (const [plugin, methods] of Object.entries(pluginIpcMap)) {
     }
 }
 
+const updaterProgressListeners = new Set<(stage: string, progress: number) => void>();
+ipcRenderer.on(IpcEvents.UPDATER_PROGRESS, (_, stage: string, progress: number) => updaterProgressListeners.forEach(cb => cb(stage, progress)));
+
 export default {
     themes: {
         uploadTheme: async (fileName: string, fileData: string): Promise<void> => {
@@ -51,6 +54,11 @@ export default {
         getUpdates: () => invoke<IpcRes<UpdateData[]>>(IpcEvents.UPDATER_LIST_UPDATES),
         fetchUpdate: () => invoke<IpcRes<boolean>>(IpcEvents.UPDATER_FETCH_UPDATE),
         applyUpdate: () => invoke<IpcRes<boolean>>(IpcEvents.UPDATER_APPLY_UPDATE),
+        /** Returns a function that stops listening. */
+        onProgress: (cb: (stage: string, progress: number) => void) => {
+            updaterProgressListeners.add(cb);
+            return (): void => { updaterProgressListeners.delete(cb); };
+        },
     },
 
     userPlugins: {
