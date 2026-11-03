@@ -39,15 +39,20 @@ const SPLASH_CSS = `
     margin-top: 10px; min-height: 11px; font-size: 8px; font-weight: 500; letter-spacing: .22em; margin-right: -.22em;
     text-transform: uppercase; color: #ffffff59; transition: opacity .4s;
 }
+#ec-progress {
+    position: fixed; left: 50%; bottom: 30px; width: 140px; transform: translateX(-50%); z-index: 100; text-align: center; white-space: nowrap;
+    font: 500 8px -apple-system, "Segoe UI", sans-serif; letter-spacing: .3em; text-transform: uppercase; color: #ffffff80;
+}
+#ec-progress .label { margin-bottom: 9px; }
+#ec-progress .track { height: 1px; background: #ffffff1f; border-radius: 1px; overflow: hidden; }
+#ec-progress .fill { height: 100%; width: 0; background: #fff; box-shadow: 0 0 6px #fff; transition: width .3s cubic-bezier(.2, .8, .2, 1); }
 @keyframes ec-in { to { opacity: 1; } }
 @keyframes ec-track { from { letter-spacing: .15em; opacity: 0; } to { letter-spacing: .5em; opacity: 1; } }
 `;
 
-const APPLY_THEME = `(css) => {
+// The splash page's CSP can block inline styles, so all styling goes through webContents.insertCSS and these only add classes.
+const APPLY_THEME = `() => {
     if (document.getElementById("ec-splash")) return;
-    const style = document.createElement("style");
-    style.textContent = css;
-    document.head.appendChild(style);
 
     const root = document.createElement("div");
     root.id = "ec-splash";
@@ -109,12 +114,11 @@ const RENDER_PROGRESS = `(text, progress) => {
     if (!bar) {
         bar = document.createElement("div");
         bar.id = "ec-progress";
-        bar.style.cssText = "position:fixed;left:50%;bottom:30px;width:140px;transform:translateX(-50%);z-index:100;text-align:center;white-space:nowrap;font:500 8px -apple-system,'Segoe UI',sans-serif;letter-spacing:.3em;text-transform:uppercase;color:#ffffff80";
-        bar.innerHTML = '<div style="margin-bottom:9px"></div><div style="height:1px;background:#ffffff1f;border-radius:1px;overflow:hidden"><div style="height:100%;width:0;background:#fff;box-shadow:0 0 6px #fff;transition:width .3s cubic-bezier(.2,.8,.2,1)"></div></div>';
+        bar.innerHTML = '<div class="label"></div><div class="track"><div class="fill"></div></div>';
         (document.getElementById("ec-splash") || document.body).appendChild(bar);
     }
-    bar.firstChild.textContent = text + "  " + Math.round(progress * 100) + "%";
-    bar.lastChild.firstChild.style.width = Math.round(progress * 100) + "%";
+    bar.querySelector(".label").textContent = text + "  " + Math.round(progress * 100) + "%";
+    bar.querySelector(".fill").style.width = Math.round(progress * 100) + "%";
 }`;
 
 async function download(url: string, onProgress: (progress: number) => void) {
@@ -157,7 +161,9 @@ export function initSplash(theme: boolean, update: boolean) {
             };
             const show = (text: string, progress: number) => run(`(${RENDER_PROGRESS})(${JSON.stringify(text)}, ${progress})`);
 
-            if (theme) run(`(${APPLY_THEME})(${JSON.stringify(SPLASH_CSS)})`);
+            console.log("[EnderCord] Found the splash screen at", win.webContents.getURL());
+            win.webContents.insertCSS(SPLASH_CSS).catch(err => console.error("[EnderCord] Failed to style the splash screen", err));
+            if (theme) run(`(${APPLY_THEME})()`);
 
             try {
                 const data = await release;
