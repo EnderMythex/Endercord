@@ -1,0 +1,92 @@
+@property --vc-ender-sweep {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 300deg;
+}
+
+/* Translucent surfaces, from the frame (most see through) to popouts (almost solid) */
+.vc-ender-theme.theme-dark,
+.vc-ender-theme .theme-dark,
+.vc-ender-theme.theme-darker,
+.vc-ender-theme .theme-darker,
+.vc-ender-theme.theme-midnight,
+.vc-ender-theme .theme-midnight {
+    --vc-ender-frame: rgb(6 6 8 / calc(var(--vc-ender-alpha) * .55));
+    --vc-ender-sidebar: rgb(10 10 12 / calc(var(--vc-ender-alpha) * .7));
+    --vc-ender-chat: rgb(14 14 17 / calc(var(--vc-ender-alpha) * .8));
+    --vc-ender-surface: rgb(22 22 26 / calc(var(--vc-ender-alpha) * .9));
+    --vc-ender-floating: rgb(18 18 21 / min(1, calc(var(--vc-ender-alpha) + .12)));
+
+    /* Legacy names */
+    --background-tertiary: var(--vc-ender-frame);
+    --background-secondary: var(--vc-ender-sidebar);
+    --background-secondary-alt: var(--vc-ender-sidebar);
+    --background-primary: var(--vc-ender-chat);
+    --background-floating: var(--vc-ender-floating);
+    --background-nested-floating: var(--vc-ender-floating);
+    --modal-background: var(--vc-ender-floating);
+    --modal-footer-background: var(--vc-ender-floating);
+    --channeltextarea-background: var(--vc-ender-surface);
+
+    /* Visual refresh names */
+    --app-frame-background: var(--vc-ender-frame);
+    --background-base-lowest: var(--vc-ender-frame);
+    --background-base-lower: var(--vc-ender-sidebar);
+    --background-base-low: var(--vc-ender-chat);
+    --bg-base-tertiary: var(--vc-ender-frame);
+    --bg-base-secondary: var(--vc-ender-sidebar);
+    --bg-base-primary: var(--vc-ender-chat);
+    --chat-background-default: var(--vc-ender-chat);
+    --background-surface-high: var(--vc-ender-surface);
+    --background-surface-higher: var(--vc-ender-surface);
+    --background-surface-highest: var(--vc-ender-floating);
+    --bg-surface-raised: var(--vc-ender-surface);
+    --bg-surface-overlay: var(--vc-ender-floating);
+    --input-background-default: var(--vc-ender-surface);
+    --border-subtle: rgb(255 255 255 / 6%);
+}
+
+.vc-ender-theme #app-mount {
+    background: rgb(5 5 6 / var(--vc-ender-alpha));
+    isolation: isolate;
+}
+
+/* The logo's ring, low in the corner behind everything: a thin line with a soft halo... */
+.vc-ender-theme.vc-ender-ring #app-mount::before,
+.vc-ender-theme.vc-ender-ring #app-mount::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.vc-ender-theme.vc-ender-ring #app-mount::before {
+    background: radial-gradient(
+        circle 80vmin at 84% 92%,
+        transparent calc(55vmin - 34px),
+        rgb(255 255 255 / 3.5%) calc(55vmin - 4px),
+        rgb(255 255 255 / 14%) 55vmin,
+        rgb(255 255 255 / 2%) calc(55vmin + 3px),
+        transparent calc(55vmin + 22px)
+    );
+}
+
+/* ...and the bright arc, gliding slowly back and forth along it */
+.vc-ender-theme.vc-ender-ring #app-mount::after {
+    background: radial-gradient(
+        circle 80vmin at 84% 92%,
+        transparent calc(55vmin - 18px),
+        rgb(255 255 255 / 10%) calc(55vmin - 3px),
+        rgb(255 255 255 / 75%) 55vmin,
+        rgb(255 255 255 / 8%) calc(55vmin + 3px),
+        transparent calc(55vmin + 14px)
+    );
+    mask-image: conic-gradient(from 0deg at 84% 92%, transparent calc(var(--vc-ender-sweep) - 28deg), #000 var(--vc-ender-sweep), transparent calc(var(--vc-ender-sweep) + 28deg));
+    animation: vc-ender-sweep 14s ease-in-out infinite alternate;
+}
+
+@keyframes vc-ender-sweep {
+    from { --vc-ender-sweep: 282deg; }
+    to { --vc-ender-sweep: 345deg; }
+}
