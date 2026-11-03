@@ -5,7 +5,7 @@
 // @author          EnderCord (https://github.com/enzomtpYT/PawsomeVencord)
 // @namespace       https://github.com/enzomtpYT/PawsomeVencord
 // @supportURL      https://github.com/enzomtpYT/PawsomeVencord
-// @icon            https://raw.githubusercontent.com/enzomtpYT/PawsomeVencord/refs/heads/main/browser/icon.png
+// @icon            https://raw.githubusercontent.com/EnderMythex/Endercord/refs/heads/main/browser/icon.png
 // @license         GPL-3.0
 // @match           *://*.discord.com/*
 // @grant           GM_xmlhttpRequest

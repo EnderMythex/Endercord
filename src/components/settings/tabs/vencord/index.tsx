@@ -28,15 +28,14 @@ import { Margins } from "@utils/margins";
 import { isAnyPluginDev } from "@utils/misc";
 import { relaunch } from "@utils/native";
 import { promptToRestart } from "@utils/promptToRestart";
-import { GuildMemberStore, React, useMemo, UserStore } from "@webpack/common";
+import { GuildMemberStore, React, UserStore } from "@webpack/common";
 
 import { DonateButtonComponent } from "./DonateButton";
 import { MacOSVibrancySettings } from "./MacVibrancySettings";
 import { NotificationSection } from "./NotificationSettings";
 import { WindowsMaterialSettings } from "./WindowsMaterialSettings";
 
-const DEFAULT_DONATE_IMAGE = "https://cdn.discordapp.com/emojis/1026533090627174460.png";
-const SHIGGY_DONATE_IMAGE = "https://raw.githubusercontent.com/enzomtpYT/PawsomeVencord/refs/heads/main/browser/icon.png";
+const DONATE_IMAGE = "https://raw.githubusercontent.com/EnderMythex/Endercord/refs/heads/main/browser/icon.png";
 
 const VENNIE_DONATOR_IMAGE = "https://cdn.discordapp.com/emojis/1238120638020063377.png";
 const COZY_CONTRIB_IMAGE = "https://cdn.discordapp.com/emojis/1026533070955872337.png";
@@ -173,11 +172,6 @@ function Switches() {
 }
 
 function EquicordSettings() {
-    const donateImage = useMemo(() =>
-        Math.random() > 0.5 ? DEFAULT_DONATE_IMAGE : SHIGGY_DONATE_IMAGE,
-        []
-    );
-
     const user = UserStore?.getCurrentUser();
 
     return (
@@ -203,7 +197,7 @@ function EquicordSettings() {
                 <SpecialCard
                     title="Support the Project"
                     description="Please consider supporting the development of EnderCord by donating!"
-                    cardImage={donateImage}
+                    cardImage={DONATE_IMAGE}
                     backgroundImage={DONOR_BACKGROUND_IMAGE}
                     backgroundColor="#c3a3ce"
                 >
