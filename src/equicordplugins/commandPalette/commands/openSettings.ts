@@ -33,7 +33,7 @@ export const DISCORD_SETTINGS_ROUTES: SettingsRoute[] = [
     { route: "equicord_plugins", label: "Equicord Plugins", keywords: ["plugins"] },
     { route: "equicord_themes", label: "Equicord Themes", keywords: ["themes", "css"] },
     { route: "equicord_updater", label: "Equicord Updater", keywords: ["update"] },
-    { route: "equicord_changelog", label: "Equicord Changelog", keywords: ["changelog", "news"] }
+    { route: "equicord_updater", label: "Equicord Changelog", keywords: ["changelog", "news"] }
 ];
 
 const ROUTE_ALIASES = new Map<string, string[]>([
@@ -55,8 +55,7 @@ const ROUTE_ALIASES = new Map<string, string[]>([
     ["equicord_main", ["equicord_main_panel"]],
     ["equicord_plugins", ["equicord_plugins_panel"]],
     ["equicord_themes", ["equicord_themes_panel"]],
-    ["equicord_updater", ["equicord_updater_panel"]],
-    ["equicord_changelog", ["equicord_changelog_panel"]]
+    ["equicord_updater", ["equicord_updater_panel", "equicord_changelog", "equicord_changelog_panel"]]
 ]);
 
 const ROUTE_LOOKUP = (() => {

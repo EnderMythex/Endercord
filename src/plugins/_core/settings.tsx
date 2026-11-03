@@ -5,18 +5,18 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { BackupRestoreIcon, CloudIcon, HammerAndChiselIcon, LogIcon, MainSettingsIcon, PaintbrushIcon, PatchHelperIcon, PluginsIcon, UpdaterIcon } from "@components/Icons";
+import { BackupRestoreIcon, CloudIcon, HammerAndChiselIcon, MainSettingsIcon, PaintbrushIcon, PatchHelperIcon, PluginsIcon, UpdaterIcon } from "@components/Icons";
 import {
     BackupAndRestoreTab,
-    ChangelogTab,
     CloudTab,
     PatchHelperTab,
     PluginsTab,
     ThemesTab,
-    UpdaterTab,
+    UpdatesTab,
     UserPluginsTab,
     VencordTab,
 } from "@components/settings";
+import { PluginsNavButton } from "@components/settings/PluginsHub";
 import { gitHashShort } from "@shared/vencordUserAgent";
 import { Devs } from "@utils/constants";
 import { isTruthy } from "@utils/guards";
@@ -109,6 +109,12 @@ const settings = definePluginSettings({
             { label: "At the very bottom", value: "bottom" },
         ] as { label: string; value: SettingsLocation; default?: boolean; }[]
     },
+    showPluginsButton: {
+        type: OptionType.BOOLEAN,
+        description: "Show a Plugins button above your DMs, next to Friends and Quests",
+        default: true,
+        restartNeeded: true
+    },
     includeVencordInfoWhenCopying: {
         type: OptionType.BOOLEAN,
         description: "Also copy Equicord info (Equicord, Electron, Chromium) when clicking the version info in the bottom left area of the Settings page",
@@ -146,6 +152,15 @@ export default definePlugin({
             ]
         },
         {
+            find: '.QUEST_HOME)},"quests")',
+            predicate: () => settings.store.showPluginsButton,
+            replacement: {
+                // After the Quests item, whether it's rendered conditionally or hidden by another plugin
+                match: /(?<=\.QUEST_HOME\)\},"quests"\)(?:&&undefined)?(?::null|:void 0)?)(?=[,\]])/,
+                replace: ",$self.renderPluginsButton()"
+            }
+        },
+        {
             find: ".buildLayout().map",
             replacement: {
                 match: /(\i)\.buildLayout\(\)(?=\.map)/,
@@ -153,6 +168,8 @@ export default definePlugin({
             }
         }
     ],
+
+    renderPluginsButton: () => <PluginsNavButton key="endercord-plugins" />,
 
     buildEntry(options: EntryOptions): SettingsLayoutNode {
         const { key, title, panelTitle = title, Component, Icon } = options;
@@ -216,18 +233,12 @@ export default definePlugin({
                 Component: ThemesTab,
                 Icon: PaintbrushIcon
             }),
-            !IS_UPDATER_DISABLED && UpdaterTab && buildEntry({
-                key: "equicord_updater",
-                title: "Updater",
-                panelTitle: "EnderCord Updater",
-                Component: UpdaterTab,
-                Icon: UpdaterIcon
-            }),
             buildEntry({
-                key: "equicord_changelog",
-                title: "Changelog",
-                Component: ChangelogTab,
-                Icon: LogIcon,
+                key: "equicord_updater",
+                title: "Updates",
+                panelTitle: "EnderCord Updates",
+                Component: UpdatesTab,
+                Icon: UpdaterIcon
             }),
             buildEntry({
                 key: "equicord_cloud",
