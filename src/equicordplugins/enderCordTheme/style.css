@@ -37,7 +37,8 @@
     --border-subtle: rgb(255 255 255 / 6%);
 }
 
-#app-mount:not(#vc-ender-none) {
+/* Only the main window: popouts and the game overlay get a copy of these styles but not the attribute */
+#app-mount[data-vc-ender-main] {
     background: rgb(5 5 6 / var(--vc-ender-alpha, .85));
     isolation: isolate;
 }

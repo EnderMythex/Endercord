@@ -5,8 +5,8 @@
 }
 
 /* The logo's ring, low in the corner behind everything: a thin line with a soft halo... */
-#app-mount::before,
-#app-mount::after {
+#app-mount[data-vc-ender-main]::before,
+#app-mount[data-vc-ender-main]::after {
     content: "";
     position: fixed;
     inset: 0;
@@ -14,7 +14,7 @@
     pointer-events: none;
 }
 
-#app-mount::before {
+#app-mount[data-vc-ender-main]::before {
     background: radial-gradient(
         circle 80vmin at 84% 92%,
         transparent calc(55vmin - 34px),
@@ -26,7 +26,7 @@
 }
 
 /* ...and the bright arc, gliding slowly back and forth along it */
-#app-mount::after {
+#app-mount[data-vc-ender-main]::after {
     background: radial-gradient(
         circle 80vmin at 84% 92%,
         transparent calc(55vmin - 18px),

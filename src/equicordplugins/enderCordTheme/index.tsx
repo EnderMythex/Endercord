@@ -71,6 +71,8 @@ export default definePlugin({
     // fallback in the CSS, because Discord rewrites <html> at times and that used to make the theme vanish.
     start() {
         document.documentElement.style.setProperty("--vc-ender-alpha", String(settings.store.opacity / 100));
+        // Popout windows share this page's code and copy its styles, so only this document gets marked as the main window
+        if (!/^\/(popout|overlay)/.test(location.pathname)) document.getElementById("app-mount")?.setAttribute("data-vc-ender-main", "");
         enableStyle(style);
         if (settings.store.showRing) enableStyle(ring);
     },
@@ -78,6 +80,7 @@ export default definePlugin({
     stop() {
         disableStyle(style);
         disableStyle(ring);
+        document.getElementById("app-mount")?.removeAttribute("data-vc-ender-main");
         document.documentElement.style.removeProperty("--vc-ender-alpha");
     }
 });
