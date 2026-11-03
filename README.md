@@ -39,36 +39,20 @@ Additionally, PawsomeVencord includes 14 exclusive or customized plugins (locate
 
 ## Installing / Uninstalling
 
-Windows
+Download the [EnderCord Installer](https://github.com/EnderMythex/EndercordInstaller):
 
-| | X64 | ARM64 |
-| --- | --- | --- |
-| GUI | [Download](https://github.com/enzomtpYT/PawsomeVencordInstaller/releases/latest/download/PawsomeVencordInstaller.exe) | [Download](https://github.com/enzomtpYT/PawsomeVencordInstaller/releases/latest/download/PawsomeVencordInstaller-arm64.exe) |
-| CLI | [Download](https://github.com/enzomtpYT/PawsomeVencordInstaller/releases/latest/download/PawsomeVencordInstallerCli.exe) | [Download](https://github.com/enzomtpYT/PawsomeVencordInstaller/releases/latest/download/PawsomeVencordInstallerCli-arm64.exe) |
-
-MacOS
-
-| | Universal | X64 | ARM64 |
+| | Windows | macOS | Linux |
 | --- | --- | --- | --- |
-| GUI | [Download](https://github.com/enzomtpYT/PawsomeVencordInstaller/releases/latest/download/PawsomeVencordInstaller.dmg) | [Download](https://github.com/enzomtpYT/PawsomeVencordInstaller/releases/latest/download/PawsomeVencordInstaller-x64.dmg) | [Download](https://github.com/enzomtpYT/PawsomeVencordInstaller/releases/latest/download/PawsomeVencordInstaller-arm64.dmg) |
-| CLI | [Download](https://github.com/enzomtpYT/PawsomeVencordInstaller/releases/latest/download/PawsomeVencordInstallerCli-universal) | [Download](https://github.com/enzomtpYT/PawsomeVencordInstaller/releases/latest/download/PawsomeVencordInstallerCli-x64) | [Download](https://github.com/enzomtpYT/PawsomeVencordInstaller/releases/latest/download/PawsomeVencordInstallerCli-arm64) |
+| GUI | [x64](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstaller.exe) / [ARM64](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstaller-arm64.exe) | [Universal](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstaller-macos.zip) | [x64](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstaller-linux) / [ARM64](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstaller-linux-arm64) |
+| CLI | [x64](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstallerCli.exe) / [ARM64](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstallerCli-arm64.exe) | [Universal](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstallerCli-universal) | [x64](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstallerCli-linux) / [ARM64](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstallerCli-linux-arm64) |
 
-The CLI builds are plain binaries, so run `chmod +x <file>` after downloading.
-
-Linux
-
-| | X64 | ARM64 |
-| --- | --- | --- |
-| Combined GUI | [Download](https://github.com/enzomtpYT/PawsomeVencordInstaller/releases/latest/download/PawsomeVencordInstaller) | [Download](https://github.com/enzomtpYT/PawsomeVencordInstaller/releases/latest/download/PawsomeVencordInstaller-arm64) |
-| X11 GUI | [Download](https://github.com/enzomtpYT/PawsomeVencordInstaller/releases/latest/download/PawsomeVencordInstaller-x11) | [Download](https://github.com/enzomtpYT/PawsomeVencordInstaller/releases/latest/download/PawsomeVencordInstaller-x11-arm64) |
-| Wayland GUI | [Download](https://github.com/enzomtpYT/PawsomeVencordInstaller/releases/latest/download/PawsomeVencordInstaller-wayland) | [Download](https://github.com/enzomtpYT/PawsomeVencordInstaller/releases/latest/download/PawsomeVencordInstaller-wayland-arm64) |
-| CLI | [Download](https://github.com/enzomtpYT/PawsomeVencordInstaller/releases/latest/download/PawsomeVencordInstallerCli-linux) | [Download](https://github.com/enzomtpYT/PawsomeVencordInstaller/releases/latest/download/PawsomeVencordInstallerCli-linux-arm64) |
+On macOS and Linux, run `chmod +x <file>` after downloading the CLI. On Linux you can also run:
 
 ```shell
-bash -c "$(curl -sS https://raw.githubusercontent.com/enzomtpYT/PawsomeVencord/refs/heads/main/misc/install.sh)"
+sh -c "$(curl -sS https://raw.githubusercontent.com/EnderMythex/EndercordInstaller/main/install.sh)"
 ```
 
-## Installing PawsomeVencord Devbuild
+## Installing the EnderCord Devbuild
 
 ### Dependencies
 
@@ -82,13 +66,13 @@ Install `pnpm`:
 npm i -g pnpm
 ```
 
-> :exclamation: **IMPORTANT** Make sure you aren't using an admin/root terminal from here onwards. It **will** mess up your Discord/PawsomeVencord instance and you **will** most likely have to reinstall.
+> :exclamation: **IMPORTANT** Make sure you aren't using an admin/root terminal from here onwards. It **will** mess up your Discord/EnderCord instance and you **will** most likely have to reinstall.
 
-Clone PawsomeVencord:
+Clone EnderCord:
 
 ```shell
-git clone https://github.com/enzomtpYT/PawsomeVencord
-cd PawsomeVencord
+git clone https://github.com/EnderMythex/Endercord
+cd Endercord
 ```
 
 Install dependencies:
@@ -97,25 +81,25 @@ Install dependencies:
 pnpm install --frozen-lockfile
 ```
 
-Build PawsomeVencord:
+Build EnderCord:
 
 ```shell
 pnpm build
 ```
 
-Inject PawsomeVencord into your desktop client:
+Inject EnderCord into your desktop client:
 
 ```shell
 pnpm inject
 ```
 
-Build PawsomeVencord for web:
+Build EnderCord for web:
 
 ```shell
 pnpm buildWeb
 ```
 
-After building PawsomeVencord's web extension, locate the appropriate ZIP file in the `dist` directory and follow your browser’s guide for installing custom extensions, if supported.
+After building EnderCord's web extension, locate the appropriate ZIP file in the `dist` directory and follow your browser’s guide for installing custom extensions, if supported.
 
 Note: Firefox extension zip requires Firefox for developers
 

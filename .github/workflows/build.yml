@@ -19,7 +19,7 @@ permissions:
 
 jobs:
     Build:
-        name: Build PawsomeVencord
+        name: Build EnderCord
         runs-on: ubuntu-latest
 
         steps:
@@ -67,10 +67,16 @@ jobs:
                   rm release/package.json
                   rm release/*.map
 
-            - name: Upload PawsomeVencord Stable
-              if: ${{ vars.ACT == 'false' }}
+            - name: Upload EnderCord Stable
+              if: ${{ vars.ACT != 'true' }}
+              env:
+                  GH_TOKEN: ${{ github.token }}
               run: |
+                  # The installer and the updater read the build hash from the release title.
+                  title="EnderCord $(git rev-parse HEAD)"
+                  gh release view latest >/dev/null 2>&1 || gh release create latest --target "$(git rev-parse HEAD)" --title "$title" --notes "Latest EnderCord build, updated on every push to main."
                   gh release upload latest --clobber dist/release/*
+                  gh release edit latest --title "$title"
 
             - name: Upload Plugin JSONs to Equibored repo
               if: github.repository == 'enzomtpYT/PawsomeVencord' && vars.ACT == 'false'

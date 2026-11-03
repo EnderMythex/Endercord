@@ -25,7 +25,7 @@ import { Readable } from "stream";
 import { finished } from "stream/promises";
 import { fileURLToPath } from "url";
 
-const BASE_URL = "https://github.com/enzomtpYT/PawsomeVencordInstaller/releases/latest/download/";
+const BASE_URL = "https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/";
 
 const BASE_DIR = join(dirname(fileURLToPath(import.meta.url)), "..");
 const FILE_DIR = join(BASE_DIR, "dist", "Installer");
@@ -39,19 +39,15 @@ function getFilename() {
     switch (process.platform) {
         case "win32":
             return byArch({
-                arm64: "PawsomeVencordInstallerCli-arm64.exe",
-                default: "PawsomeVencordInstallerCli.exe"
+                arm64: "EndercordInstallerCli-arm64.exe",
+                default: "EndercordInstallerCli.exe"
             });
         case "darwin":
-            return byArch({
-                x64: "PawsomeVencordInstallerCli-x64",
-                arm64: "PawsomeVencordInstallerCli-arm64",
-                default: "PawsomeVencordInstallerCli-universal"
-            });
+            return "EndercordInstallerCli-universal";
         case "linux":
             return byArch({
-                arm64: "PawsomeVencordInstallerCli-linux-arm64",
-                default: "PawsomeVencordInstallerCli-linux"
+                arm64: "EndercordInstallerCli-linux-arm64",
+                default: "EndercordInstallerCli-linux"
             });
         default:
             throw new Error("Unsupported platform: " + process.platform);
@@ -71,7 +67,7 @@ async function ensureBinary() {
 
     const res = await fetch(BASE_URL + filename, {
         headers: {
-            "User-Agent": "PawsomeVencord (https://github.com/enzomtpYT/PawsomeVencord)",
+            "User-Agent": "EnderCord (https://github.com/EnderMythex/Endercord)",
             "If-None-Match": etag
         }
     });
