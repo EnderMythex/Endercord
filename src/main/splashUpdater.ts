@@ -37,7 +37,7 @@ interface Release {
 // Runs inside Discord's splash window, which is plain HTML without React. Kept as strings so the bundler leaves them alone.
 const SPLASH_CSS = `
 #ec-splash {
-    position: fixed; inset: 0; z-index: 99; display: flex; align-items: center; justify-content: center;
+    position: fixed; inset: 0; z-index: 2147483646; display: flex; align-items: center; justify-content: center;
     background: radial-gradient(ellipse at center, #131416 0%, #060607 70%);
     font-family: -apple-system, "SF Pro Display", "Inter", "Segoe UI", sans-serif; color: #fff;
     opacity: 0; animation: ec-in 1s cubic-bezier(.2, .8, .2, 1) forwards; -webkit-app-region: drag;
@@ -53,7 +53,7 @@ const SPLASH_CSS = `
     text-transform: uppercase; color: #ffffff59; transition: opacity .4s;
 }
 #ec-progress {
-    position: fixed; left: 50%; bottom: 30px; width: 140px; transform: translateX(-50%); z-index: 100; text-align: center; white-space: nowrap;
+    position: fixed; left: 50%; bottom: 30px; width: 140px; transform: translateX(-50%); z-index: 2147483647; text-align: center; white-space: nowrap;
     font: 500 8px -apple-system, "Segoe UI", sans-serif; letter-spacing: .3em; text-transform: uppercase; color: #ffffff80;
 }
 #ec-progress .label { margin-bottom: 9px; }
@@ -188,7 +188,19 @@ export function initSplash(theme: boolean, update: boolean) {
 
             log("theming splash screen", url);
             win.webContents.insertCSS(SPLASH_CSS).then(() => log("splash css inserted"), err => log("insertCSS failed:", err));
-            if (theme) run(`(${APPLY_THEME})()`);
+            if (theme) {
+                run(`(${APPLY_THEME})()`);
+                // What is actually on screen, in case something still covers the theme
+                setTimeout(() => {
+                    if (win.isDestroyed()) return;
+                    win.webContents.executeJavaScript(`(() => {
+                        const el = document.getElementById("ec-splash");
+                        const cs = el && getComputedStyle(el);
+                        const top = document.elementFromPoint(innerWidth / 2, innerHeight / 2);
+                        return JSON.stringify({ exists: !!el, rect: el && el.getBoundingClientRect(), opacity: cs && cs.opacity, zIndex: cs && cs.zIndex, display: cs && cs.display, topElement: top && top.outerHTML.slice(0, 160) });
+                    })()`).then(info => log("splash state", info), err => log("splash state failed:", err));
+                }, 1500);
+            }
 
             try {
                 const data = await release;

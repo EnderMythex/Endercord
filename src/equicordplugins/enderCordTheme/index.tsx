@@ -15,8 +15,6 @@ import definePlugin, { OptionType } from "@utils/types";
 
 import style from "./style.css?managed";
 
-const root = document.documentElement;
-
 const settings = definePluginSettings({
     opacity: {
         type: OptionType.SLIDER,
@@ -24,13 +22,13 @@ const settings = definePluginSettings({
         markers: [40, 50, 60, 70, 80, 90, 100],
         default: 85,
         stickToMarkers: false,
-        onChange: (value: number) => root.style.setProperty("--vc-ender-alpha", String(value / 100))
+        onChange: (value: number) => document.documentElement.style.setProperty("--vc-ender-alpha", String(value / 100))
     },
     showRing: {
         type: OptionType.BOOLEAN,
         description: "Show the EnderCord ring in the background",
         default: true,
-        onChange: (value: boolean) => root.classList.toggle("vc-ender-ring", value)
+        onChange: (value: boolean) => document.documentElement.classList.toggle("vc-ender-ring", value)
     }
 });
 
@@ -68,7 +66,9 @@ export default definePlugin({
     settings,
     settingsAboutComponent: () => IS_WEB ? null : <WindowTranslucency />,
 
+    // Not cached at the top of the file: EnderCord loads before the page exists, when documentElement is still null.
     start() {
+        const root = document.documentElement;
         root.style.setProperty("--vc-ender-alpha", String(settings.store.opacity / 100));
         root.classList.add("vc-ender-theme");
         root.classList.toggle("vc-ender-ring", settings.store.showRing);
@@ -76,6 +76,7 @@ export default definePlugin({
     },
 
     stop() {
+        const root = document.documentElement;
         disableStyle(style);
         root.classList.remove("vc-ender-theme", "vc-ender-ring");
         root.style.removeProperty("--vc-ender-alpha");
