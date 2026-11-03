@@ -130,6 +130,12 @@ const settings = definePluginSettings({
         default: 10,
         stickToMarkers: true
     },
+    customSplash: {
+        type: OptionType.BOOLEAN,
+        description: "Use the EnderCord black hole theme on Discord's startup screen",
+        default: true,
+        restartNeeded: true
+    },
     optimizeForSize: {
         type: OptionType.BOOLEAN,
         description: "Make Discord's JavaScript engine favor memory over speed",

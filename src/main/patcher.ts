@@ -67,8 +67,11 @@ if (!IS_VANILLA) {
     }
 
     // The installer build can't update through git, so it updates itself while Discord's splash screen is up
-    if (IS_STANDALONE && !IS_UPDATER_DISABLED && !IS_VESKTOP && !IS_PAWTOP && settings.autoUpdate) {
-        require("./splashUpdater").initSplashUpdater();
+    if (!IS_VESKTOP && !IS_PAWTOP) {
+        require("./splashUpdater").initSplash(
+            perf?.customSplash !== false,
+            IS_STANDALONE && !IS_UPDATER_DISABLED && settings.autoUpdate
+        );
     }
 
     // Repatch after host updates on Windows and Linux
