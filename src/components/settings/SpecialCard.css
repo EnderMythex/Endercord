@@ -15,15 +15,15 @@
 .vc-invite-support-button,
 .vc-donate-support-button {
     overflow: visible !important;
-    color: black;
-    background-color: color-mix(in srgb, #c3a3ce 25%, rgb(240 178 240));
+    color: white;
+    background-color: #2e3a6e;
 }
 
 .vc-invite-support-button:hover,
 .vc-donate-support-button:hover {
     overflow: visible !important;
-    color: black;
-    background-color: color-mix(in srgb, #c3a3ce 50%, rgb(240 178 240));
+    color: white;
+    background-color: #4a4f9e;
 }
 
 .vc-translate-button {
@@ -164,4 +164,15 @@
 .vc-translate-modal-paragraph {
     padding: 12px;
     text-align: center;
+}
+
+.vc-endercord-card {
+    background-image:
+        radial-gradient(circle at 85% 50%, rgb(183 166 230 / 35%), transparent 30%),
+        radial-gradient(ellipse at 20% 0%, #2e3a6e, transparent 70%);
+}
+
+.vc-endercord-card .vc-special-title,
+.vc-endercord-card .vc-special-text {
+    color: #ecebff;
 }

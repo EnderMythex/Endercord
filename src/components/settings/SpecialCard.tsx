@@ -23,6 +23,7 @@ import { Divider } from "@components/Divider";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { classNameFactory } from "@utils/css";
+import { classes } from "@utils/misc";
 import { Clickable } from "@webpack/common";
 import type { PropsWithChildren } from "react";
 
@@ -37,16 +38,17 @@ interface StyledCardProps {
     backgroundColor?: string;
     buttonTitle?: string;
     buttonOnClick?: () => void;
+    className?: string;
 }
 
-export function SpecialCard({ title, subtitle, description, cardImage, backgroundImage, backgroundColor, buttonTitle, buttonOnClick: onClick, children }: PropsWithChildren<StyledCardProps>) {
+export function SpecialCard({ title, subtitle, description, cardImage, backgroundImage, backgroundColor, buttonTitle, buttonOnClick: onClick, className, children }: PropsWithChildren<StyledCardProps>) {
     const cardStyle: React.CSSProperties = {
         backgroundColor: backgroundColor || "#9c85ef",
-        backgroundImage: `url(${backgroundImage || ""})`,
+        backgroundImage: backgroundImage && `url(${backgroundImage})`,
     };
 
     return (
-        <Card className={cl("card", "card-special")} style={cardStyle}>
+        <Card className={classes(cl("card", "card-special"), className)} style={cardStyle}>
             <div className={cl("card-flex")}>
                 <div className={cl("card-flex-main")}>
                     <Heading className={cl("title")} tag="h5">{title}</Heading>

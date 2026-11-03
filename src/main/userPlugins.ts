@@ -5,7 +5,7 @@
  */
 
 import { IpcEvents } from "@shared/IpcEvents";
-import { ipcMain, shell } from "electron";
+import { ipcMain, IpcMainInvokeEvent, shell } from "electron";
 import { existsSync } from "fs";
 import { mkdir, writeFile } from "fs/promises";
 import { join } from "path";
@@ -44,7 +44,7 @@ if (!IS_STANDALONE) {
         await shell.openPath(USER_PLUGINS_DIR);
     });
 
-    ipcMain.handle(IpcEvents.CREATE_USERPLUGIN, serializeErrors(async (name: unknown) => {
+    ipcMain.handle(IpcEvents.CREATE_USERPLUGIN, serializeErrors(async (_: IpcMainInvokeEvent, name: unknown) => {
         if (typeof name !== "string" || !/^[A-Za-z][A-Za-z0-9]{1,63}$/.test(name))
             throw "Plugin names must start with a letter and only contain letters and numbers.";
 
