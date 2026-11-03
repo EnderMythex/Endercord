@@ -18,13 +18,12 @@ import { showToast, TextInput, useState } from "@webpack/common";
 
 import Plugins, { PluginMeta } from "~plugins";
 
-const userPlugins = Object.values(Plugins).filter(p => PluginMeta[p.name].userPlugin);
-
 function errorText(res: IpcRes) {
     return res.ok ? "" : typeof res.error === "string" ? res.error : String(res.error?.message ?? res.error);
 }
 
 function UserPluginsTab() {
+    const userPlugins = Object.values(Plugins).filter(p => PluginMeta[p.name].userPlugin);
     const [name, setName] = useState("");
     const [building, setBuilding] = useState(false);
 
