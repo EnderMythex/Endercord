@@ -87,4 +87,22 @@ function UserPluginsTab() {
     );
 }
 
-export default wrapTab(UserPluginsTab, "My Plugins");
+function SourceOnlyTab() {
+    return (
+        <SettingsTab>
+            <Paragraph className={Margins.bottom16}>
+                You installed EnderCord with the installer, which ships a ready made build. Your own plugins get compiled
+                together with EnderCord, so making them needs the source version on your computer.
+            </Paragraph>
+            <Paragraph className={Margins.bottom16}>
+                Clone the repository, then run <code>pnpm install</code>, <code>pnpm build</code> and <code>pnpm inject</code> in it.
+                After restarting Discord, this tab lets you create, edit and rebuild your plugins.
+            </Paragraph>
+            <Button onClick={() => VencordNative.native.openExternal("https://github.com/EnderMythex/Endercord#installing-the-endercord-devbuild")}>
+                Show Me How
+            </Button>
+        </SettingsTab>
+    );
+}
+
+export default wrapTab(IS_STANDALONE ? SourceOnlyTab : UserPluginsTab, "My Plugins");

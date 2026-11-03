@@ -204,7 +204,7 @@ export default definePlugin({
                 Component: PluginsTab,
                 Icon: PluginsIcon
             }),
-            !IS_WEB && !IS_STANDALONE && buildEntry({
+            !IS_WEB && buildEntry({
                 key: "equicord_user_plugins",
                 title: "My Plugins",
                 Component: UserPluginsTab,
