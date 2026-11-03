@@ -13,7 +13,7 @@ import {
     UpdatesTab,
     VencordTab,
 } from "@components/settings";
-import { PluginsNavButton } from "@components/settings/PluginsHub";
+import { NavIcon, PLUGINS_ROUTE, PluginsNavButton, PluginsPage, setLinkButton } from "@components/settings/PluginsPage";
 import { gitHashShort } from "@shared/vencordUserAgent";
 import { Devs } from "@utils/constants";
 import { isTruthy } from "@utils/guards";
@@ -149,12 +149,44 @@ export default definePlugin({
             ]
         },
         {
+            // Plugins page in the main area, next to Quests
             find: '.QUEST_HOME)},"quests")',
-            predicate: () => settings.store.showPluginsButton,
+            replacement: [
+                {
+                    // The page itself, right after the Quests route
+                    match: /(?<=\(0,(\i\.jsx)\)\((\i\.\i),\{path:\i\.\i\.QUEST_HOME,render:\i,impressionName:\i\.\i\.QUEST_HOME,disableTrack:!0\}\))/,
+                    replace: `,(0,$1)($2,{path:"${PLUGINS_ROUTE}",render:$self.renderPluginsPage,disableTrack:!0})`
+                },
+                {
+                    // Keep the page's row highlighted instead of falling back to Friends
+                    match: /(?<=let \i=\[)(?=\i\.\i\.FAMILY_CENTER,\i\.\i\.QUEST_HOME,)/,
+                    replace: `"${PLUGINS_ROUTE}",`
+                },
+                {
+                    // Grab Discord's row component from the Friends row, to render ours the same way
+                    match: /(?<=\(0,\i\.jsx\)\()(\i\.\i)(?=,\{showHoverGradient:\i,onClick:\i,selected:\i,route:\i\.\i\.FRIENDS,)/,
+                    replace: "$self.setLinkButton($1)"
+                },
+                {
+                    // Title bar shows "Plugins" like it shows "Quests"
+                    match: /(\i)\.pathname\.startsWith\(\i\.\i\.QUEST_HOME\)\?\((\i)=\i\.intl\.string\(\i\.t\.\i\),(\i)=\(0,(\i\.jsx)\)\(\i\.\i,\{size:"sm"\}\)\):/,
+                    replace: `$&$1.pathname.startsWith("${PLUGINS_ROUTE}")?($2="Plugins",$3=(0,$4)($self.NavIcon,{size:"sm"})):`
+                },
+                {
+                    // Our row under Quests, also when another plugin hides Quests
+                    match: /(?<=\{selected:(\i)\.startsWith\(\i\.\i\.QUEST_HOME\)\},"quests"\)(?:&&undefined)?)(?=[,\]])/,
+                    replace: ",$self.renderPluginsButton($1)",
+                    predicate: () => settings.store.showPluginsButton
+                }
+            ]
+        },
+        {
+            // Routes the app shell accepts, otherwise our page redirects home
+            find: ".QUEST_HOME_DEPRECATED,",
+            all: true,
             replacement: {
-                // After the Quests item, whether it's rendered conditionally or hidden by another plugin
-                match: /(?<=\.QUEST_HOME\)\},"quests"\)(?:&&undefined)?(?::null|:void 0)?)(?=[,\]])/,
-                replace: ",$self.renderPluginsButton()"
+                match: /(?<=\i\.\i\.QUEST_HOME_DEPRECATED,\i\.\i\.QUEST_HOME,)(?=\i\.\i\.CONJURE,)/,
+                replace: `"${PLUGINS_ROUTE}",`
             }
         },
         {
@@ -166,7 +198,10 @@ export default definePlugin({
         }
     ],
 
-    renderPluginsButton: () => <PluginsNavButton key="endercord-plugins" />,
+    NavIcon,
+    setLinkButton,
+    renderPluginsButton: (path: string) => <PluginsNavButton key="endercord-plugins" path={path} />,
+    renderPluginsPage: () => <PluginsPage />,
 
     buildEntry(options: EntryOptions): SettingsLayoutNode {
         const { key, title, panelTitle = title, Component, Icon } = options;
