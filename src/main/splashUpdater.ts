@@ -23,92 +23,98 @@ interface Release {
 
 // Runs inside Discord's splash window, which is plain HTML without React. Kept as strings so the bundler leaves them alone.
 const SPLASH_CSS = `
-html {
-    background:
-        radial-gradient(1px 1px at 20% 30%, #fff8, transparent),
-        radial-gradient(1px 1px at 70% 15%, #fff6, transparent),
-        radial-gradient(1px 1px at 85% 60%, #fff5, transparent),
-        radial-gradient(1px 1px at 35% 80%, #fff4, transparent),
-        radial-gradient(1.5px 1.5px at 55% 45%, #fff3, transparent),
-        radial-gradient(ellipse at 30% 10%, #2e3a6e, #151a33 45%, #07080f 85%) !important;
+#ec-splash {
+    position: fixed; inset: 0; z-index: 99; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(ellipse at center, #131416 0%, #060607 70%);
+    font-family: -apple-system, "SF Pro Display", "Inter", "Segoe UI", sans-serif; color: #fff;
+    opacity: 0; animation: ec-in 1s cubic-bezier(.2, .8, .2, 1) forwards; -webkit-app-region: drag;
 }
-body { background: transparent !important; color: #ecebff !important; }
-#ec-bh { position: fixed; width: var(--s); height: var(--s); transform: translate(-50%, -50%); pointer-events: none; z-index: 9; }
-#ec-bh .core {
-    position: absolute; inset: 24%; border-radius: 50%; background: #000; z-index: 2;
-    box-shadow: 0 0 0 1.5px #c8bdf0d0, 0 0 calc(var(--s) * .14) calc(var(--s) * .05) #b7a6e699, 0 0 calc(var(--s) * .4) calc(var(--s) * .12) #5b5fb055;
-    animation: ec-pulse 2.6s ease-in-out infinite;
+#ec-splash canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+#ec-splash .text { position: relative; text-align: center; }
+#ec-splash .title {
+    font-size: 11px; font-weight: 500; letter-spacing: .5em; margin-right: -.5em;
+    animation: ec-track 1.8s cubic-bezier(.2, .8, .2, 1) forwards;
 }
-#ec-bh .ring { position: absolute; inset: 0 -45%; transform: rotate(-14deg); }
-#ec-bh .ring > div {
-    position: absolute; left: 6%; right: 6%; top: 40%; height: 20%; border-radius: 50%;
-    border: calc(var(--s) * .035) solid; filter: drop-shadow(0 0 3px #e2b48f99);
-    animation: ec-spin 1.6s linear infinite;
+#ec-splash .status {
+    margin-top: 10px; min-height: 11px; font-size: 8px; font-weight: 500; letter-spacing: .22em; margin-right: -.22em;
+    text-transform: uppercase; color: #ffffff59; transition: opacity .4s;
 }
-#ec-bh .back { clip-path: inset(0 0 50% 0); opacity: .65; z-index: 1; }
-#ec-bh .front { clip-path: inset(50% 0 0 0); z-index: 3; }
-@keyframes ec-pulse {
-    50% { box-shadow: 0 0 0 1.5px #e0d8ff, 0 0 calc(var(--s) * .2) calc(var(--s) * .07) #b7a6e6bb, 0 0 calc(var(--s) * .5) calc(var(--s) * .16) #5b5fb077; }
-}
-@keyframes ec-spin {
-    0%, 100% { border-color: #c9c3e8 #e2b48f #f1c39c #f4f4fb; }
-    25% { border-color: #f4f4fb #c9c3e8 #e2b48f #f1c39c; }
-    50% { border-color: #f1c39c #f4f4fb #c9c3e8 #e2b48f; }
-    75% { border-color: #e2b48f #f1c39c #f4f4fb #c9c3e8; }
-}
-#ec-brand { position: fixed; bottom: 10px; left: 0; right: 0; text-align: center; font: 600 9px sans-serif; letter-spacing: .3em; color: #b7a6e6; opacity: .55; z-index: 9; }
-#ec-update { position: fixed; left: 16%; right: 16%; bottom: 30px; z-index: 9; font: 600 10px sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #ecebff; }
-#ec-update .label { display: flex; justify-content: space-between; margin-bottom: 6px; }
-#ec-update .track { height: 3px; border-radius: 3px; background: #ffffff1a; overflow: hidden; }
-#ec-update .fill { height: 100%; width: 0; border-radius: 3px; background: linear-gradient(90deg, #b7a6e6, #e2b48f); box-shadow: 0 0 8px #e2b48f; transition: width .2s; }
+@keyframes ec-in { to { opacity: 1; } }
+@keyframes ec-track { from { letter-spacing: .15em; opacity: 0; } to { letter-spacing: .5em; opacity: 1; } }
 `;
 
 const APPLY_THEME = `(css) => {
-    if (document.getElementById("ec-style")) return;
+    if (document.getElementById("ec-splash")) return;
     const style = document.createElement("style");
-    style.id = "ec-style";
     style.textContent = css;
     document.head.appendChild(style);
 
-    const area = el => { const r = el.getBoundingClientRect(); return r.width * r.height; };
-    const full = innerWidth * innerHeight * .8;
-    for (const el of document.body.querySelectorAll("*"))
-        if (area(el) >= full && getComputedStyle(el).backgroundColor !== "rgba(0, 0, 0, 0)") el.style.background = "transparent";
+    const root = document.createElement("div");
+    root.id = "ec-splash";
+    root.innerHTML = '<canvas></canvas><div class="text"><div class="title">ENDERCORD</div><div class="status"></div></div>';
+    document.body.appendChild(root);
 
-    const logo = [...document.querySelectorAll("video, img, canvas, svg")].filter(el => area(el) > 0).sort((a, b) => area(b) - area(a))[0];
-    const hole = document.createElement("div");
-    hole.id = "ec-bh";
-    hole.innerHTML = '<div class="ring back"><div></div></div><div class="core"></div><div class="ring front"><div></div></div>';
-    document.body.appendChild(hole);
-    const place = () => {
-        const r = logo && logo.getBoundingClientRect();
-        const size = r && r.width ? Math.max(r.width, r.height) * .9 : 110;
-        hole.style.setProperty("--s", size + "px");
-        hole.style.left = (r && r.width ? r.left + r.width / 2 : innerWidth / 2) + "px";
-        hole.style.top = (r && r.width ? r.top + r.height / 2 : innerHeight * .4) + "px";
+    // Mirror Discord's own status line ("Checking for updates...") in our style
+    const status = root.querySelector(".status");
+    const readStatus = () => {
+        const texts = [...document.body.querySelectorAll("*")]
+            .filter(el => !root.contains(el) && el.children.length === 0 && el.textContent.trim())
+            .map(el => el.textContent.trim());
+        const text = texts[texts.length - 1] || "";
+        if (status.textContent !== text) status.textContent = text;
     };
-    if (logo) logo.style.opacity = "0";
-    place();
-    addEventListener("resize", place);
+    readStatus();
+    new MutationObserver(readStatus).observe(document.body, { subtree: true, childList: true, characterData: true });
 
-    const brand = document.createElement("div");
-    brand.id = "ec-brand";
-    brand.textContent = "ENDERCORD";
-    document.body.appendChild(brand);
+    // Particle ring: a crisp core line plus drifting dust, with a bright arc sweeping around it
+    const canvas = root.querySelector("canvas");
+    const ctx = canvas.getContext("2d");
+    const gauss = () => (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;
+    const particles = Array.from({ length: 1600 }, (_, i) => {
+        const core = i % 3 === 0;
+        const a = Math.random() * Math.PI * 2;
+        const dust = .5 + .5 * Math.sin(a + 1.2);
+        return {
+            a, core,
+            dr: core ? gauss() * 1.2 : Math.abs(gauss()) * (3 + 22 * dust) * (Math.random() < .5 ? -.6 : 1),
+            size: core ? 1.1 : .5 + Math.random() * .8,
+            speed: .7 + Math.random() * .6,
+            phase: Math.random() * 6.28,
+        };
+    });
+    const draw = t => {
+        const dpr = devicePixelRatio || 1;
+        const w = innerWidth, h = innerHeight;
+        if (canvas.width !== w * dpr) { canvas.width = w * dpr; canvas.height = h * dpr; }
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, w, h);
+        const cx = w / 2, cy = h / 2, R = Math.min(w, h) * .3;
+        const sweep = t * .0005;
+        for (const p of particles) {
+            const ang = p.a + t * .00012 * p.speed;
+            const r = R + p.dr + Math.sin(t * .001 + p.phase) * (p.core ? .3 : 1.5);
+            const light = Math.pow(.5 + .5 * Math.cos(ang - sweep), p.core ? 8 : 3);
+            const fade = p.core ? 1 : Math.max(0, 1 - Math.abs(p.dr) / 26);
+            const alpha = (p.core ? .06 + light : (.04 + .6 * light) * fade) * (.85 + .15 * Math.sin(t * .004 + p.phase));
+            ctx.fillStyle = "rgba(255,255,255," + alpha + ")";
+            ctx.fillRect(cx + Math.cos(ang) * r, cy + Math.sin(ang) * r, p.size, p.size);
+        }
+        requestAnimationFrame(draw);
+    };
+    requestAnimationFrame(draw);
 }`;
 
 const RENDER_PROGRESS = `(text, progress) => {
-    let root = document.getElementById("ec-update");
-    if (!root) {
-        root = document.createElement("div");
-        root.id = "ec-update";
-        root.innerHTML = '<div class="label"><span></span><span></span></div><div class="track"><div class="fill"></div></div>';
-        document.body.appendChild(root);
+    let bar = document.getElementById("ec-progress");
+    if (!bar) {
+        bar = document.createElement("div");
+        bar.id = "ec-progress";
+        bar.style.cssText = "position:fixed;left:50%;bottom:30px;width:140px;transform:translateX(-50%);z-index:100;text-align:center;white-space:nowrap;font:500 8px -apple-system,'Segoe UI',sans-serif;letter-spacing:.3em;text-transform:uppercase;color:#ffffff80";
+        bar.innerHTML = '<div style="margin-bottom:9px"></div><div style="height:1px;background:#ffffff1f;border-radius:1px;overflow:hidden"><div style="height:100%;width:0;background:#fff;box-shadow:0 0 6px #fff;transition:width .3s cubic-bezier(.2,.8,.2,1)"></div></div>';
+        (document.getElementById("ec-splash") || document.body).appendChild(bar);
     }
-    const [label, percent] = root.querySelectorAll(".label span");
-    label.textContent = text;
-    percent.textContent = Math.round(progress * 100) + "%";
-    root.querySelector(".fill").style.width = Math.round(progress * 100) + "%";
+    bar.firstChild.textContent = text + "  " + Math.round(progress * 100) + "%";
+    bar.lastChild.firstChild.style.width = Math.round(progress * 100) + "%";
 }`;
 
 async function download(url: string, onProgress: (progress: number) => void) {
@@ -159,14 +165,14 @@ export function initSplash(theme: boolean, update: boolean) {
                 const asset = data.assets.find(a => a.name === ASAR_FILE);
                 if (data.name.slice(data.name.lastIndexOf(" ") + 1) === gitHash || !asset) return;
 
-                show("Updating EnderCord...", 0);
-                const asar = await download(asset.browser_download_url, p => show("Updating EnderCord...", p));
+                show("Updating", 0);
+                const asar = await download(asset.browser_download_url, p => show("Updating", p));
 
                 // Once the main window is up it reads from the asar, so leave it to the in app updater.
                 if (win.isDestroyed()) return;
 
                 writeFileSync(__dirname, asar, { flush: true });
-                show("EnderCord updated, restarting...", 1);
+                show("Restarting", 1);
                 // Quit gracefully: Discord only saves your login token back when its window closes normally,
                 // so a hard exit here would log you out.
                 setTimeout(() => {

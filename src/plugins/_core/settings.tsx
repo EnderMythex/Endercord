@@ -132,7 +132,7 @@ const settings = definePluginSettings({
     },
     customSplash: {
         type: OptionType.BOOLEAN,
-        description: "Use the EnderCord black hole theme on Discord's startup screen",
+        description: "Use the EnderCord theme on Discord's startup screen",
         default: true,
         restartNeeded: true
     },

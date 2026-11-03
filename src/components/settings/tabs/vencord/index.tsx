@@ -198,7 +198,7 @@ function EquicordSettings() {
                     title="Support the Project"
                     description="Please consider supporting the development of EnderCord by donating!"
                     cardImage={DONATE_IMAGE}
-                    backgroundColor="#0b0d1a"
+                    backgroundColor="#060607"
                     className="vc-endercord-card"
                 >
                     <DonateButtonComponent />
