@@ -103,7 +103,9 @@ const APPLY_THEME = `() => {
     const draw = t => {
         const dpr = devicePixelRatio || 1;
         const w = innerWidth, h = innerHeight;
-        if (canvas.width !== w * dpr) { canvas.width = w * dpr; canvas.height = h * dpr; }
+        // Check both sides: Discord resizes the splash window after it loads, and a stale height stretches the ring
+        const bw = Math.round(w * dpr), bh = Math.round(h * dpr);
+        if (canvas.width !== bw || canvas.height !== bh) { canvas.width = bw; canvas.height = bh; }
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         ctx.clearRect(0, 0, w, h);
         const cx = w / 2, cy = h / 2, R = Math.min(w, h) * .3;
