@@ -1,130 +1,166 @@
-# EnderCord
+<p align="center">
+  <img src=".github/assets/banner.png" alt="EnderCord" width="100%">
+</p>
 
-EnderCord is a personal fork of [PawsomeVencord](https://github.com/enzomtpYT/PawsomeVencord).
+<p align="center">
+  <a href="https://github.com/EnderMythex/EndercordInstaller/releases/latest"><img src="https://img.shields.io/github/v/release/EnderMythex/EndercordInstaller?style=flat-square&label=installer&labelColor=000&color=1c1c1e" alt="Installer release"></a>
+  <a href="https://github.com/EnderMythex/Endercord/commits/main"><img src="https://img.shields.io/github/last-commit/EnderMythex/Endercord?style=flat-square&label=updated&labelColor=000&color=1c1c1e" alt="Last update"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/EnderMythex/Endercord?style=flat-square&labelColor=000&color=1c1c1e" alt="License"></a>
+</p>
 
-## Making your own plugins
+<p align="center">
+  A refined Discord client mod with a translucent black theme, 300+ plugins,<br>
+  and plugins you can write yourself without rebuilding anything.
+</p>
 
-Open Discord settings, go to **EnderCord Settings > My Plugins**.
+<p align="center">
+  <a href="#install"><b>Install</b></a> &nbsp;·&nbsp;
+  <a href="#features"><b>Features</b></a> &nbsp;·&nbsp;
+  <a href="#make-your-own-plugins"><b>Make plugins</b></a> &nbsp;·&nbsp;
+  <a href="#build-from-source"><b>Build from source</b></a>
+</p>
 
-- **Quick plugins** work everywhere, including installs made with the installer. Type a name and click Create: a JavaScript file appears in your plugins folder (`Equicord/plugins` in your config folder). Edit it in any text editor, then click **Reload Discord** (or press Ctrl+R). No rebuild needed. The file explains which EnderCord APIs it can use.
-- **Compiled plugins** are TypeScript plugins in `src/userplugins/<name>/index.tsx`, built together with EnderCord. They need the source version (`pnpm build` + `pnpm inject`) and a rebuild after each change.
+<br>
 
-## Note, this is an unofficial fork of equicord. This repo might be behind the main repo at times.
+## Features
 
-- Not to mention that this fork is pretty much only being maintained by 2 people LOL
+<table>
+  <tr>
+    <td width="62%"><img src=".github/assets/theme.png" alt="EnderCord theme preview"></td>
+    <td width="38%"><img src=".github/assets/splash.png" alt="EnderCord startup screen"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Translucent theme preview, here with window translucency on</sub></td>
+    <td align="center"><sub>Startup screen while an update downloads</sub></td>
+  </tr>
+</table>
 
-![](https://img.shields.io/github/package-json/v/enzomtpYT/PawsomeVencord?style=for-the-badge&logo=github&logoColor=d3869b&label=&color=1d2021&labelColor=282828)
+- **Translucent black theme.** Discord's panels sit on a deep black background with the EnderCord ring glowing in the corner. Opacity is adjustable, and window translucency shows your desktop through Discord (frosted glass on Windows).
+- **Animated startup screen.** A particle ring replaces Discord's loading logo, and EnderCord updates download right there with a progress bar, before Discord even opens.
+- **Plugins page.** A Plugins entry sits next to Friends and Quests and opens a full page with your plugins, your own plugins and your themes.
+- **Plugins without rebuilding.** Drop a JavaScript file in a folder, reload Discord, done. Works with the installer too. [How it works](#make-your-own-plugins)
+- **Performance tab.** Live memory and CPU per Discord process, a one click Light Mode, and hibernation that frees memory while Discord sits in the background, with notifications and calls still coming through.
+- **Stays put.** EnderCord re-applies itself when Discord updates, and restarts gracefully so you stay logged in.
+- **300+ plugins** from [Vencord](https://github.com/Vendicated/Vencord) and [Equicord](https://github.com/Equicord/Equicord), plus the [PawsomeVencord](https://github.com/enzomtpYT/PawsomeVencord) extras.
 
-PawsomeVencord is a fork of [Equicord](https://github.com/equicord/equicord), with over 300+ plugins.
+<br>
 
-You can join our [discord server](https://discord.gg/w9jVtzNx4c) for commits, changes, chat or even support.
+## Install
 
-### Included Plugins
+<table>
+  <tr>
+    <td width="58%" valign="top">
 
-Standard Equicord and Vencord plugins can be browsed [here](https://equicord.org/plugins).
+Download the [**EnderCord Installer**](https://github.com/EnderMythex/EndercordInstaller), pick your Discord, click **Install**. It closes Discord gently, patches it and starts it again.
 
-Additionally, PawsomeVencord includes 14 exclusive or customized plugins (located in `src/pawsomeplugins/`), badged with the Pawsome logo in the client settings and filterable via the **Show PawsomeVencord** filter:
+| | Download |
+| --- | --- |
+| **Windows** | [x64](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstaller.exe) · [ARM64](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstaller-arm64.exe) |
+| **macOS** | [Universal](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstaller-macos.zip) |
+| **Linux** | [x64](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstaller-linux) · [ARM64](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstaller-linux-arm64) |
 
-- **alwaysPing**: Always ping users when replying.
-- **bark**: Adds a chatbar button to bark in chat.
-- **betterClips**: Enhanced clips controls and options.
-- **betterMicrophone** *(Desktop)*: Further customize your microphone settings.
-- **betterScreenshare** *(Desktop)*: Further customize screen sharing resolution and frame rates.
-- **bigFileUpload**: Upload large files via external file hosts through `/fileupload` or the chat button.
-- **customVcNarrator**: Voice channel narrator with TikTok TTS for joins, leaves, and moves.
-- **fakeDeafen**: Appears deafened while still hearing voice channels.
-- **meow**: Adds a chatbar button with random meow sounds and messages.
-- **notifyUserChanges**: Context menu option to receive notifications on voice channel or status changes.
-- **philsPluginLibrary**: Shared helper library for Phil's plugins.
-- **serverProfilesToolbox**: Adds copy, paste, and reset buttons to the server profiles editor.
-- **VenPlugPlus**: Enhanced plugin management utilities.
-- **webcamStartNotifier**: Alerts when cameras turn on in voice channels.
+Prefer a terminal? On Linux:
 
-## Installing / Uninstalling
-
-Download the [EnderCord Installer](https://github.com/EnderMythex/EndercordInstaller):
-
-| | Windows | macOS | Linux |
-| --- | --- | --- | --- |
-| GUI | [x64](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstaller.exe) / [ARM64](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstaller-arm64.exe) | [Universal](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstaller-macos.zip) | [x64](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstaller-linux) / [ARM64](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstaller-linux-arm64) |
-| CLI | [x64](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstallerCli.exe) / [ARM64](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstallerCli-arm64.exe) | [Universal](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstallerCli-universal) | [x64](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstallerCli-linux) / [ARM64](https://github.com/EnderMythex/EndercordInstaller/releases/latest/download/EndercordInstallerCli-linux-arm64) |
-
-On macOS and Linux, run `chmod +x <file>` after downloading the CLI. On Linux you can also run:
-
-```shell
+```sh
 sh -c "$(curl -sS https://raw.githubusercontent.com/EnderMythex/EndercordInstaller/main/install.sh)"
 ```
 
-## Installing the EnderCord Devbuild
+On Windows, from PowerShell:
 
-### Dependencies
-
-[Git](https://git-scm.com/download) and [Node.JS LTS](https://nodejs.dev/en/) are required.
-
-Install `pnpm`:
-
-> :exclamation: This next command may need to be run as admin/root depending on your system, and you may need to close and reopen your terminal for pnpm to be in your PATH.
-
-```shell
-npm i -g pnpm
+```powershell
+iwr -useb https://raw.githubusercontent.com/EnderMythex/EndercordInstaller/main/install.ps1 | iex
 ```
 
-> :exclamation: **IMPORTANT** Make sure you aren't using an admin/root terminal from here onwards. It **will** mess up your Discord/EnderCord instance and you **will** most likely have to reinstall.
+  </td>
+    <td width="42%" valign="top"><img src=".github/assets/installer.png" alt="EnderCord Installer"></td>
+  </tr>
+</table>
 
-Clone EnderCord:
+After that, EnderCord keeps itself up to date: new builds download on Discord's startup screen.
 
-```shell
+<br>
+
+## Make your own plugins
+
+Open **Settings › Plugins & Themes › My Plugins**, or the **Plugins** page next to Quests.
+
+### Quick plugins, no rebuild
+
+Type a name and click **Create**. A JavaScript file appears in your plugins folder (`%APPDATA%\Equicord\plugins` on Windows, `~/.config/Equicord/plugins` on Linux). Edit it in any editor, then press **Ctrl+R** in Discord.
+
+```js
+module.exports = definePlugin({
+    name: "HelloWorld",
+    description: "Says hello when Discord starts.",
+    authors: [{ name: "You", id: 0n }],
+
+    start() {
+        EnderCord.Common.showToast({ text: "Hello from my plugin!", variant: "success" });
+    }
+});
+```
+
+Quick plugins get `definePlugin` and an `EnderCord` object with everything the built in plugins use: `Api` (settings, commands, notifications, context menus), `Common` (Discord's React, stores and components), `Webpack` (find Discord modules), `Util` and `Components`. They load before the other plugins start, so patches work too.
+
+> Every file in that folder runs with full access to your Discord account. Only add plugins you wrote or trust.
+
+### Compiled plugins
+
+For bigger plugins, write TypeScript in `src/userplugins/<name>/index.tsx`. They are built together with EnderCord, so they need the source version below and a rebuild after each change (the **Rebuild and Restart** button does both).
+
+<br>
+
+## Build from source
+
+You need [Git](https://git-scm.com/downloads), [Node.js LTS](https://nodejs.org) and pnpm (`npm i -g pnpm`). Don't use an admin or root terminal, it can break your Discord install.
+
+```sh
 git clone https://github.com/EnderMythex/Endercord
 cd Endercord
-```
-
-Install dependencies:
-
-```shell
 pnpm install --frozen-lockfile
-```
-
-Build EnderCord:
-
-```shell
 pnpm build
-```
-
-Inject EnderCord into your desktop client:
-
-```shell
 pnpm inject
 ```
 
-Build EnderCord for web:
+`pnpm inject` points your Discord at this folder, so after any change, run `pnpm build` and restart Discord. For the browser extension, run `pnpm buildWeb` and load the zip from `dist`.
 
-```shell
-pnpm buildWeb
-```
+<details>
+<summary><b>PawsomeVencord plugins included</b></summary>
+<br>
 
-After building EnderCord's web extension, locate the appropriate ZIP file in the `dist` directory and follow your browser’s guide for installing custom extensions, if supported.
+Located in `src/pawsomeplugins/` and filterable with **Show PawsomeVencord** in the plugin list.
 
-Note: Firefox extension zip requires Firefox for developers
+- **alwaysPing**: always ping users when replying.
+- **bark**: a chat bar button to bark in chat.
+- **betterClips**: more clip controls and options.
+- **betterMicrophone** *(desktop)*: further customize your microphone.
+- **betterScreenshare** *(desktop)*: custom screen share resolution and frame rate.
+- **bigFileUpload**: upload large files through external hosts with `/fileupload` or the chat button.
+- **customVcNarrator**: voice channel narrator with TikTok voices for joins, leaves and moves.
+- **fakeDeafen**: appear deafened while still hearing the channel.
+- **meow**: a chat bar button with random meows.
+- **notifyUserChanges**: get notified when someone joins a voice channel or changes status.
+- **philsPluginLibrary**: shared helpers for Phil's plugins.
+- **serverProfilesToolbox**: copy, paste and reset buttons in the server profile editor.
+- **VenPlugPlus**: extra plugin management tools.
+- **webcamStartNotifier**: alerts when cameras turn on in your voice channel.
+
+</details>
+
+<br>
 
 ## Credits
 
-Thank you to [Equicord](https://github.com/equicord), [Vendicated](https://github.com/Vendicated) for creating [Vencord](https://github.com/Vendicated/Vencord) & [Suncord](https://github.com/verticalsync/Suncord) by [verticalsync](https://github.com/verticalsync) for helping when needed.
+EnderCord stands on the work of [Vendicated](https://github.com/Vendicated) and the [Vencord](https://github.com/Vendicated/Vencord) contributors, the [Equicord](https://github.com/Equicord) team, [enzomtp](https://github.com/enzomtpYT) and the [PawsomeVencord](https://github.com/enzomtpYT/PawsomeVencord) contributors, and [Suncord](https://github.com/verticalsync/Suncord) by verticalsync. Licensed under the [GPL 3.0](LICENSE).
 
 ## Disclaimer
 
-Discord is trademark of Discord Inc., and solely mentioned for the sake of descriptivity.
-Mentioning it does not imply any affiliation with or endorsement by Discord Inc.
-Vencord is not connected to PawsomeVencord and as such, all donation links go to Vendicated's donation link.
+Discord is a trademark of Discord Inc. and is only mentioned to describe what this project works with. EnderCord is not affiliated with or endorsed by Discord Inc., Vencord, Equicord or PawsomeVencord.
 
 <details>
-<summary>Using PawsomeVencord violates Discord's terms of service</summary>
+<summary>Client mods and Discord's Terms of Service</summary>
+<br>
 
-Client modifications are against Discord’s Terms of Service.
-
-However, Discord is pretty indifferent about them and there are no known cases of users getting banned for using client mods! So you should generally be fine if you don’t use plugins that implement abusive behaviour. But no worries, all inbuilt plugins are safe to use!
-
-Regardless, if your account is essential to you and getting disabled would be a disaster for you, you should probably not use any client mods (not exclusive to PawsomeVencord), just to be safe
-
-Additionally, make sure not to post screenshots with PawsomeVencord in a server where you might get banned for it
+Client modifications are against Discord's Terms of Service. In practice Discord doesn't go after people using them, and there are no known bans for client mods alone, as long as you don't use plugins that abuse Discord. Still, if losing your account would be a disaster, don't use any client mod. And avoid posting screenshots showing EnderCord in servers that might ban you for it.
 
 </details>
