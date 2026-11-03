@@ -20,7 +20,7 @@ import { Devs } from "@utils/constants";
 import { isTruthy } from "@utils/guards";
 import definePlugin, { IconProps, OptionType } from "@utils/types";
 import { waitFor } from "@webpack";
-import { React } from "@webpack/common";
+import { NavigationRouter, React, SelectedChannelStore } from "@webpack/common";
 import type { ComponentType, PropsWithChildren, ReactNode } from "react";
 
 const enum LayoutType {
@@ -113,12 +113,67 @@ const settings = definePluginSettings({
         default: true,
         restartNeeded: true
     },
+    hibernation: {
+        type: OptionType.SELECT,
+        description: "Free memory while Discord sits in the background. Never happens during a voice call",
+        options: [
+            { label: "Off", value: "off", default: true },
+            { label: "Light: keeps notifications and calls", value: "light" },
+            { label: "Full: frees the most, no notifications until you open Discord", value: "full" },
+        ] as { label: string; value: "off" | "light" | "full"; default?: boolean; }[],
+        restartNeeded: true
+    },
+    hibernationDelay: {
+        type: OptionType.SLIDER,
+        description: "Minutes in the background before hibernating",
+        markers: [1, 5, 10, 15, 30, 60],
+        default: 10,
+        stickToMarkers: true
+    },
+    optimizeForSize: {
+        type: OptionType.BOOLEAN,
+        description: "Make Discord's JavaScript engine favor memory over speed",
+        default: false,
+        restartNeeded: true
+    },
     includeVencordInfoWhenCopying: {
         type: OptionType.BOOLEAN,
         description: "Also copy Equicord info (Equicord, Electron, Chromium) when clicking the version info in the bottom left area of the Settings page",
         default: true
     }
 });
+
+const PARK_ROUTE = "/channels/@me";
+let hibernateTimer: ReturnType<typeof setTimeout> | undefined;
+let parkedFrom: string | null = null;
+
+/** Light hibernation: leave the open channel so its images and videos are freed, clear Chromium's image cache and collect garbage. */
+function hibernate() {
+    if (!document.hidden || SelectedChannelStore.getVoiceChannelId()) return;
+    if (settings.store.hibernation === "full") return void VencordNative.native.hibernate();
+
+    if (location.pathname !== PARK_ROUTE) {
+        parkedFrom = location.pathname;
+        NavigationRouter.transitionTo(PARK_ROUTE);
+    }
+    VencordNative.native.clearCache();
+    (window as Window & { gc?(): void; }).gc?.();
+}
+
+function onVisibilityChange() {
+    clearTimeout(hibernateTimer);
+    hibernateTimer = undefined;
+
+    if (!document.hidden) {
+        // Only go back if nothing else, like clicking a notification, already moved you somewhere
+        if (parkedFrom && location.pathname === PARK_ROUTE) NavigationRouter.transitionTo(parkedFrom);
+        parkedFrom = null;
+        return;
+    }
+
+    if (settings.store.hibernation !== "off")
+        hibernateTimer = setTimeout(hibernate, settings.store.hibernationDelay * 60_000);
+}
 
 export default definePlugin({
     name: "Settings",
@@ -202,6 +257,15 @@ export default definePlugin({
 
     NavIcon,
     setLinkButton,
+    start() {
+        document.addEventListener("visibilitychange", onVisibilityChange);
+    },
+
+    stop() {
+        document.removeEventListener("visibilitychange", onVisibilityChange);
+        clearTimeout(hibernateTimer);
+    },
+
     renderPluginsButton: (path: string) => <PluginsNavButton key="endercord-plugins" path={path} />,
     renderPluginsPage: () => <PluginsPage />,
 

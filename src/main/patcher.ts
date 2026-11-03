@@ -42,6 +42,16 @@ app.setAppPath(asarPath);
 if (!IS_VANILLA) {
     const settings = RendererSettings.store;
 
+    // V8 flags from the Performance settings. Merged into any js-flags Discord sets later, since the last value would win.
+    const perf = settings.plugins?.Settings;
+    const jsFlags = [perf?.optimizeForSize && "--optimize-for-size", perf?.hibernation === "light" && "--expose-gc"].filter(Boolean).join(" ");
+    if (jsFlags) {
+        const { commandLine } = app;
+        const appendSwitch = commandLine.appendSwitch.bind(commandLine);
+        commandLine.appendSwitch = (name, value) => appendSwitch(name, name === "js-flags" && value ? `${value} ${jsFlags}` : value);
+        appendSwitch("js-flags", jsFlags);
+    }
+
     patchTrayMenu();
 
     /*

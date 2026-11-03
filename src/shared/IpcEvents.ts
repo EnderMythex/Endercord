@@ -61,4 +61,5 @@ export const enum IpcEvents {
 
     SUPPORTS_WINDOWS_MATERIAL = "VencordSupportsWindowsMaterial",
     GET_PROCESS_METRICS = "VencordGetProcessMetrics",
+    HIBERNATE = "VencordHibernate",
 }

@@ -215,6 +215,25 @@ ipcMain.handle(IpcEvents.GET_PROCESS_METRICS, () => app.getAppMetrics().map(m =>
     cpu: m.cpu.percentCPUUsage,
 })));
 
+// Full hibernation: unload Discord's page while it sits in the tray, and load it back when the window comes back.
+// Navigating away lets Discord close normally, so it keeps your login.
+ipcMain.handle(IpcEvents.HIBERNATE, e => {
+    const win = BrowserWindow.fromWebContents(e.sender);
+    if (!win || (win.isVisible() && !win.isMinimized())) return;
+
+    const url = e.sender.getURL();
+    const wake = () => {
+        win.off("show", wake);
+        win.off("restore", wake);
+        win.off("focus", wake);
+        e.sender.loadURL(url);
+    };
+    win.on("show", wake);
+    win.on("restore", wake);
+    win.on("focus", wake);
+    e.sender.loadURL("about:blank");
+});
+
 ipcMain.on(IpcEvents.SUPPORTS_WINDOWS_MATERIAL, e => {
     e.returnValue = process.platform === "win32" && Number(release().split(".")[2]) >= 22621;
 });

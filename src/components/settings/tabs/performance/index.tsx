@@ -15,6 +15,7 @@ import { Divider } from "@components/Divider";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { SettingsTab, wrapTab } from "@components/settings/tabs/BaseTab";
+import { openPluginModal } from "@components/settings/tabs/plugins/PluginModal";
 import { classNameFactory } from "@utils/css";
 import { Margins } from "@utils/margins";
 import { useAwaiter, useForceUpdater } from "@utils/react";
@@ -156,6 +157,18 @@ function PerformanceTab() {
 
             <Heading className={Margins.bottom8}>Light Mode</Heading>
             <LightMode />
+            <Divider className={Margins.bottom20} />
+
+            <Heading className={Margins.bottom8}>Hibernation & Engine</Heading>
+            <Paragraph className={Margins.bottom8}>
+                Hibernation frees memory once Discord has been in the background for a while, never during a voice call. Light keeps
+                notifications and calls: it leaves the open channel to free its images and videos, then brings you back when you open
+                Discord. Full unloads Discord completely and frees the most, but you get no notifications until you open it again.
+            </Paragraph>
+            <Paragraph className={Margins.bottom8}>
+                Optimize for size makes the JavaScript engine favor memory over speed. Both need a restart.
+            </Paragraph>
+            <Button className={Margins.bottom20} onClick={() => openPluginModal(Plugins.Settings)}>Open Hibernation Settings</Button>
             <Divider className={Margins.bottom20} />
 
             <Heading className={Margins.bottom8}>Plugins With The Most Patches</Heading>

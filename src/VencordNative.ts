@@ -11,7 +11,7 @@ import { UserThemeHeader } from "@main/themes";
 import { UpdateData } from "@main/updater";
 import { IpcEvents } from "@shared/IpcEvents";
 import type { IpcRes } from "@utils/types";
-import { ipcRenderer } from "electron/renderer";
+import { ipcRenderer, webFrame } from "electron/renderer";
 
 export function invoke<T = any>(event: IpcEvents, ...args: any[]) {
     return ipcRenderer.invoke(event, ...args) as Promise<T>;
@@ -95,6 +95,8 @@ export default {
         supportsWindowsMaterial: () => sendSync<boolean>(IpcEvents.SUPPORTS_WINDOWS_MATERIAL),
         openExternal: (url: string) => invoke<void>(IpcEvents.OPEN_EXTERNAL, url),
         getRendererCss: () => invoke<string>(IpcEvents.GET_RENDERER_CSS),
+        clearCache: () => webFrame.clearCache(),
+        hibernate: () => invoke<void>(IpcEvents.HIBERNATE),
         getProcessMetrics: () => invoke<{ pid: number; type: string; name: string; memoryKb: number; cpu: number; }[]>(IpcEvents.GET_PROCESS_METRICS),
         onRendererCssUpdate: (cb: (newCss: string) => void) => {
             if (!IS_DEV) return;
