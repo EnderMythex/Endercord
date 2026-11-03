@@ -1,0 +1,45 @@
+@property --vc-ender-sweep {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 300deg;
+}
+
+/* The logo's ring, low in the corner behind everything: a thin line with a soft halo... */
+#app-mount::before,
+#app-mount::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+}
+
+#app-mount::before {
+    background: radial-gradient(
+        circle 80vmin at 84% 92%,
+        transparent calc(55vmin - 34px),
+        rgb(255 255 255 / 3.5%) calc(55vmin - 4px),
+        rgb(255 255 255 / 14%) 55vmin,
+        rgb(255 255 255 / 2%) calc(55vmin + 3px),
+        transparent calc(55vmin + 22px)
+    );
+}
+
+/* ...and the bright arc, gliding slowly back and forth along it */
+#app-mount::after {
+    background: radial-gradient(
+        circle 80vmin at 84% 92%,
+        transparent calc(55vmin - 18px),
+        rgb(255 255 255 / 10%) calc(55vmin - 3px),
+        rgb(255 255 255 / 75%) 55vmin,
+        rgb(255 255 255 / 8%) calc(55vmin + 3px),
+        transparent calc(55vmin + 14px)
+    );
+    mask-image: conic-gradient(from 0deg at 84% 92%, transparent calc(var(--vc-ender-sweep) - 28deg), #000 var(--vc-ender-sweep), transparent calc(var(--vc-ender-sweep) + 28deg));
+    animation: vc-ender-sweep 14s ease-in-out infinite alternate;
+}
+
+@keyframes vc-ender-sweep {
+    from { --vc-ender-sweep: 282deg; }
+    to { --vc-ender-sweep: 345deg; }
+}

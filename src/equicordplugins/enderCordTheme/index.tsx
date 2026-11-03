@@ -13,6 +13,7 @@ import { Margins } from "@utils/margins";
 import { promptToRestart } from "@utils/promptToRestart";
 import definePlugin, { OptionType } from "@utils/types";
 
+import ring from "./ring.css?managed";
 import style from "./style.css?managed";
 
 const settings = definePluginSettings({
@@ -28,7 +29,7 @@ const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Show the EnderCord ring in the background",
         default: true,
-        onChange: (value: boolean) => document.documentElement.classList.toggle("vc-ender-ring", value)
+        onChange: (value: boolean) => value ? enableStyle(ring) : disableStyle(ring)
     }
 });
 
@@ -66,19 +67,17 @@ export default definePlugin({
     settings,
     settingsAboutComponent: () => IS_WEB ? null : <WindowTranslucency />,
 
-    // Not cached at the top of the file: EnderCord loads before the page exists, when documentElement is still null.
+    // The stylesheets themselves switch the theme on and off. Nothing is put on <html> except the opacity, which has a
+    // fallback in the CSS, because Discord rewrites <html> at times and that used to make the theme vanish.
     start() {
-        const root = document.documentElement;
-        root.style.setProperty("--vc-ender-alpha", String(settings.store.opacity / 100));
-        root.classList.add("vc-ender-theme");
-        root.classList.toggle("vc-ender-ring", settings.store.showRing);
+        document.documentElement.style.setProperty("--vc-ender-alpha", String(settings.store.opacity / 100));
         enableStyle(style);
+        if (settings.store.showRing) enableStyle(ring);
     },
 
     stop() {
-        const root = document.documentElement;
         disableStyle(style);
-        root.classList.remove("vc-ender-theme", "vc-ender-ring");
-        root.style.removeProperty("--vc-ender-alpha");
+        disableStyle(ring);
+        document.documentElement.style.removeProperty("--vc-ender-alpha");
     }
 });

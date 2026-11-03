@@ -1,19 +1,12 @@
-@property --vc-ender-sweep {
-    syntax: "<angle>";
-    inherits: false;
-    initial-value: 300deg;
-}
-
 /* Translucent surfaces, from the frame (most see through) to popouts (almost solid) */
 
-/* Doubled class so these beat Discord's own theme rules, which can load after ours with the same specificity */
-.vc-ender-theme.vc-ender-theme:is(.theme-dark, .theme-darker, .theme-midnight),
-.vc-ender-theme.vc-ender-theme :is(.theme-dark, .theme-darker, .theme-midnight) {
-    --vc-ender-frame: rgb(6 6 8 / calc(var(--vc-ender-alpha) * .55));
-    --vc-ender-sidebar: rgb(10 10 12 / calc(var(--vc-ender-alpha) * .7));
-    --vc-ender-chat: rgb(14 14 17 / calc(var(--vc-ender-alpha) * .8));
-    --vc-ender-surface: rgb(22 22 26 / calc(var(--vc-ender-alpha) * .9));
-    --vc-ender-floating: rgb(18 18 21 / min(1, calc(var(--vc-ender-alpha) + .12)));
+/* Enabled and disabled as a whole by the plugin. :not(#id) gives id-level specificity, so Discord's own theme rules can't win */
+:is(.theme-dark, .theme-darker, .theme-midnight):not(#vc-ender-none) {
+    --vc-ender-frame: rgb(6 6 8 / calc(var(--vc-ender-alpha, .85) * .55));
+    --vc-ender-sidebar: rgb(10 10 12 / calc(var(--vc-ender-alpha, .85) * .7));
+    --vc-ender-chat: rgb(14 14 17 / calc(var(--vc-ender-alpha, .85) * .8));
+    --vc-ender-surface: rgb(22 22 26 / calc(var(--vc-ender-alpha, .85) * .9));
+    --vc-ender-floating: rgb(18 18 21 / min(1, calc(var(--vc-ender-alpha, .85) + .12)));
 
     /* Legacy names */
     --background-tertiary: var(--vc-ender-frame);
@@ -44,59 +37,19 @@
     --border-subtle: rgb(255 255 255 / 6%);
 }
 
-.vc-ender-theme.vc-ender-theme #app-mount {
-    background: rgb(5 5 6 / var(--vc-ender-alpha));
+#app-mount:not(#vc-ender-none) {
+    background: rgb(5 5 6 / var(--vc-ender-alpha, .85));
     isolation: isolate;
 }
 
-/* The logo's ring, low in the corner behind everything: a thin line with a soft halo... */
-.vc-ender-theme.vc-ender-ring #app-mount::before,
-.vc-ender-theme.vc-ender-ring #app-mount::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-}
-
-.vc-ender-theme.vc-ender-ring #app-mount::before {
-    background: radial-gradient(
-        circle 80vmin at 84% 92%,
-        transparent calc(55vmin - 34px),
-        rgb(255 255 255 / 3.5%) calc(55vmin - 4px),
-        rgb(255 255 255 / 14%) 55vmin,
-        rgb(255 255 255 / 2%) calc(55vmin + 3px),
-        transparent calc(55vmin + 22px)
-    );
-}
-
-/* ...and the bright arc, gliding slowly back and forth along it */
-.vc-ender-theme.vc-ender-ring #app-mount::after {
-    background: radial-gradient(
-        circle 80vmin at 84% 92%,
-        transparent calc(55vmin - 18px),
-        rgb(255 255 255 / 10%) calc(55vmin - 3px),
-        rgb(255 255 255 / 75%) 55vmin,
-        rgb(255 255 255 / 8%) calc(55vmin + 3px),
-        transparent calc(55vmin + 14px)
-    );
-    mask-image: conic-gradient(from 0deg at 84% 92%, transparent calc(var(--vc-ender-sweep) - 28deg), #000 var(--vc-ender-sweep), transparent calc(var(--vc-ender-sweep) + 28deg));
-    animation: vc-ender-sweep 14s ease-in-out infinite alternate;
-}
-
-@keyframes vc-ender-sweep {
-    from { --vc-ender-sweep: 282deg; }
-    to { --vc-ender-sweep: 345deg; }
-}
-
 /* EnderCord's own settings pages, in the same minimal black style */
-.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) {
+:is(.vc-settings-tab, .vc-plugins-page-root):not(#vc-ender-none) {
     --vc-ender-glass: rgb(255 255 255 / 3%);
     --vc-ender-glass-hover: rgb(255 255 255 / 6%);
     --vc-ender-line: rgb(255 255 255 / 8%);
 }
 
-.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) :is(.vc-addon-card, .vc-card-primary, .vc-card-normal, .vc-settings-quickActions-card) {
+:is(.vc-settings-tab, .vc-plugins-page-root):not(#vc-ender-none) :is(.vc-addon-card, .vc-card-primary, .vc-card-normal, .vc-settings-quickActions-card) {
     background: var(--vc-ender-glass);
     border: 1px solid var(--vc-ender-line);
     border-radius: 14px;
@@ -104,47 +57,47 @@
     transition: background .2s ease, border-color .2s ease, transform .2s ease;
 }
 
-.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) .vc-addon-card:hover {
+:is(.vc-settings-tab, .vc-plugins-page-root):not(#vc-ender-none) .vc-addon-card:hover {
     background: var(--vc-ender-glass-hover);
     border-color: rgb(255 255 255 / 16%);
     transform: translateY(-1px);
 }
 
-.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) .vc-settings-quickActions-pill {
+:is(.vc-settings-tab, .vc-plugins-page-root):not(#vc-ender-none) .vc-settings-quickActions-pill {
     background: var(--vc-ender-glass);
     border: 1px solid var(--vc-ender-line);
     border-radius: 10px;
     box-shadow: none;
 }
 
-.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) .vc-settings-quickActions-pill:hover {
+:is(.vc-settings-tab, .vc-plugins-page-root):not(#vc-ender-none) .vc-settings-quickActions-pill:hover {
     background: var(--vc-ender-glass-hover);
     box-shadow: none;
 }
 
-.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) .vc-btn-primary {
+:is(.vc-settings-tab, .vc-plugins-page-root):not(#vc-ender-none) .vc-btn-primary {
     background: #f5f5f7;
     color: #0a0a0b;
     border-radius: 999px;
 }
 
-.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) .vc-btn-primary:hover {
+:is(.vc-settings-tab, .vc-plugins-page-root):not(#vc-ender-none) .vc-btn-primary:hover {
     background: #fff;
 }
 
-.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) .vc-btn-secondary {
+:is(.vc-settings-tab, .vc-plugins-page-root):not(#vc-ender-none) .vc-btn-secondary {
     background: var(--vc-ender-glass);
     border-color: var(--vc-ender-line);
     border-radius: 999px;
     color: #f5f5f7;
 }
 
-.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) .vc-btn-secondary:hover {
+:is(.vc-settings-tab, .vc-plugins-page-root):not(#vc-ender-none) .vc-btn-secondary:hover {
     background: var(--vc-ender-glass-hover);
 }
 
 /* Section titles in small spaced caps, like macOS settings */
-.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) .vc-h5 {
+:is(.vc-settings-tab, .vc-plugins-page-root):not(#vc-ender-none) .vc-h5 {
     font-size: 11px;
     font-weight: 600;
     letter-spacing: .12em;
@@ -152,6 +105,6 @@
     color: var(--text-muted);
 }
 
-.vc-ender-theme :is(.vc-settings-tab, .vc-plugins-page-root) .vc-settings-tab-bar {
+:is(.vc-settings-tab, .vc-plugins-page-root):not(#vc-ender-none) .vc-settings-tab-bar {
     border-bottom-color: var(--vc-ender-line);
 }
