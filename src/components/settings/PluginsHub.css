@@ -1,20 +1,10 @@
-.vc-plugins-hub-nav {
+/* Only used if Discord's own row layout class can't be found */
+.vc-plugins-hub-layout {
     display: flex;
     align-items: center;
     gap: 12px;
     height: 42px;
-    margin-bottom: 2px;
     padding: 0 8px;
-    border-radius: 8px;
-    color: var(--channels-default);
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-}
-
-.vc-plugins-hub-nav:hover {
-    background: var(--background-modifier-hover);
-    color: var(--interactive-hover);
 }
 
 .vc-plugins-hub-content {

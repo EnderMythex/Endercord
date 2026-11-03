@@ -19,7 +19,7 @@
 import ErrorBoundary from "@components/ErrorBoundary";
 import { handleComponentFailed } from "@components/handleComponentFailed";
 import { onlyOnce } from "@utils/onlyOnce";
-import { Modal, openModal } from "@webpack/common";
+import { Modal, openModal, TabBar, useState } from "@webpack/common";
 import type { ComponentType, PropsWithChildren } from "react";
 
 export function SettingsTab({ children }: PropsWithChildren) {
@@ -56,4 +56,29 @@ export function openSettingsTabModal(Tab: ComponentType<any>) {
     } catch {
         handleSettingsTabError();
     }
+}
+
+export interface SubTab {
+    id: string;
+    label: string;
+    Component: ComponentType;
+}
+
+/** One settings entry holding several tabs, shown as a tab bar on top. */
+export function makeTabbedTab(name: string, tabs: SubTab[]) {
+    function TabbedTab() {
+        const [selected, setSelected] = useState(tabs[0].id);
+        const { Component } = tabs.find(t => t.id === selected) ?? tabs[0];
+
+        return (
+            <>
+                <TabBar type="top" look="brand" className="vc-settings-tab-bar" selectedItem={selected} onItemSelect={setSelected}>
+                    {tabs.map(t => <TabBar.Item key={t.id} className="vc-settings-tab-bar-item" id={t.id}>{t.label}</TabBar.Item>)}
+                </TabBar>
+                <Component />
+            </>
+        );
+    }
+
+    return wrapTab(TabbedTab, name);
 }

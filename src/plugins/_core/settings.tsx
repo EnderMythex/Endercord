@@ -5,15 +5,12 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { BackupRestoreIcon, CloudIcon, HammerAndChiselIcon, MainSettingsIcon, PaintbrushIcon, PatchHelperIcon, PluginsIcon, UpdaterIcon } from "@components/Icons";
+import { CloudIcon, MainSettingsIcon, PatchHelperIcon, PluginsIcon, UpdaterIcon } from "@components/Icons";
 import {
-    BackupAndRestoreTab,
-    CloudTab,
+    AddonsTab,
     PatchHelperTab,
-    PluginsTab,
-    ThemesTab,
+    SyncTab,
     UpdatesTab,
-    UserPluginsTab,
     VencordTab,
 } from "@components/settings";
 import { PluginsNavButton } from "@components/settings/PluginsHub";
@@ -217,21 +214,9 @@ export default definePlugin({
             }),
             buildEntry({
                 key: "equicord_plugins",
-                title: "Plugins",
-                Component: PluginsTab,
+                title: "Plugins & Themes",
+                Component: AddonsTab,
                 Icon: PluginsIcon
-            }),
-            !IS_WEB && buildEntry({
-                key: "equicord_user_plugins",
-                title: "My Plugins",
-                Component: UserPluginsTab,
-                Icon: HammerAndChiselIcon
-            }),
-            buildEntry({
-                key: "equicord_themes",
-                title: "Themes",
-                Component: ThemesTab,
-                Icon: PaintbrushIcon
             }),
             buildEntry({
                 key: "equicord_updater",
@@ -242,16 +227,9 @@ export default definePlugin({
             }),
             buildEntry({
                 key: "equicord_cloud",
-                title: "Cloud",
-                panelTitle: "Equicord Cloud",
-                Component: CloudTab,
+                title: "Backup & Sync",
+                Component: SyncTab,
                 Icon: CloudIcon
-            }),
-            buildEntry({
-                key: "equicord_backup_restore",
-                title: "Backup & Restore",
-                Component: BackupAndRestoreTab,
-                Icon: BackupRestoreIcon
             }),
             !IS_STANDALONE && PatchHelperTab && buildEntry({
                 key: "equicord_patch_helper",
