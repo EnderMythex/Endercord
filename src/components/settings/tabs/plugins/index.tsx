@@ -60,6 +60,12 @@ function showErrorToast(message: string) {
     });
 }
 
+// Restart from the DMs so Discord does not start up on the custom Plugins page
+function restart() {
+    if (location.pathname.startsWith("/endercord-plugins")) history.replaceState(history.state, "", "/channels/@me");
+    location.reload();
+}
+
 function ReloadRequiredCard({ required, enabledPlugins, openWarningModal, resetCheckAndDo }) {
     return (
         <Card className={classes(cl("info-card"), required && "vc-warning-card")}>
@@ -69,7 +75,7 @@ function ReloadRequiredCard({ required, enabledPlugins, openWarningModal, resetC
                     <Paragraph className={cl("dep-text")}>
                         Restart now to apply new plugins and their settings
                     </Paragraph>
-                    <Button variant="primary" className={cl("restart-button")} onClick={() => location.reload()}>
+                    <Button variant="primary" className={cl("restart-button")} onClick={restart}>
                         Restart
                     </Button>
                 </>
