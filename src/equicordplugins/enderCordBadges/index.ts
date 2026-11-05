@@ -18,7 +18,11 @@ interface EnderBadge {
 }
 
 const logger = new Logger("EnderCordBadges");
-let badges: Record<string, EnderBadge[]> = {};
+// Shipped with the build so the badges show even before, or without, the download
+const BUILT_IN: Record<string, EnderBadge[]> = {
+    "1006197798577909880": [{ label: "EnderMythex", url: "https://raw.githubusercontent.com/EnderMythex/EndercordMobile/main/badges/endercord.png" }]
+};
+let badges = BUILT_IN;
 let controller: AbortController | undefined;
 
 export default definePlugin({
@@ -27,7 +31,7 @@ export default definePlugin({
     authors: [EquicordDevs.EnderMythex],
     enabledByDefault: true,
 
-    userProfileBadge: {
+    userProfileBadges: [{
         id: "endercord",
         position: BadgePosition.START,
         getBadges: ({ userId }) => (badges[userId] ?? []).map(badge => ({
@@ -36,18 +40,18 @@ export default definePlugin({
             iconSrc: badge.url,
             props: { style: { borderRadius: "50%" } }
         }))
-    },
+    }],
 
     start() {
         controller = new AbortController();
         fetch(BADGES_URL, { signal: controller.signal, cache: "no-store" })
             .then(r => r.json())
-            .then(data => { badges = data; })
+            .then(data => { badges = { ...BUILT_IN, ...data }; })
             .catch(e => logger.error("Failed to load badges", e));
     },
 
     stop() {
         controller?.abort();
-        badges = {};
+        badges = BUILT_IN;
     }
 });
