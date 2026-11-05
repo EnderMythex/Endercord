@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BadgePosition } from "@api/Badges";
+import { BadgePosition, BadgeRarity } from "@api/Badges";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin from "@utils/types";
@@ -37,6 +37,8 @@ export default definePlugin({
         getBadges: ({ userId }) => (badges[userId] ?? []).map(badge => ({
             id: "endercord",
             description: badge.label,
+            infoLabel: "EnderCord",
+            rarity: BadgeRarity.MYTHIC,
             iconSrc: badge.url,
             props: { style: { borderRadius: "50%" } }
         }))
