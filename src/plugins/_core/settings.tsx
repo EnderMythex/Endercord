@@ -214,6 +214,8 @@ export default definePlugin({
         {
             // Plugins page in the main area, next to Quests
             find: '.QUEST_HOME)},"quests")',
+            // Turning the button off removes the whole page, as a way out if a Discord update breaks these patches
+            predicate: () => settings.store.showPluginsButton,
             replacement: [
                 {
                     // The page itself, right after the Quests route
@@ -238,8 +240,7 @@ export default definePlugin({
                 {
                     // Our row under Quests, also when another plugin hides Quests
                     match: /(?<=\{selected:(\i)\.startsWith\(\i\.\i\.QUEST_HOME\)\},"quests"\)(?:&&undefined)?)(?=[,\]])/,
-                    replace: ",$self.renderPluginsButton($1)",
-                    predicate: () => settings.store.showPluginsButton
+                    replace: ",$self.renderPluginsButton($1)"
                 }
             ]
         },
@@ -247,6 +248,7 @@ export default definePlugin({
             // Routes the app shell accepts, otherwise our page redirects home
             find: ".QUEST_HOME_DEPRECATED,",
             all: true,
+            predicate: () => settings.store.showPluginsButton,
             replacement: {
                 match: /(?<=\i\.\i\.QUEST_HOME_DEPRECATED,\i\.\i\.QUEST_HOME,)(?=\i\.\i\.CONJURE,)/,
                 replace: `"${PLUGINS_ROUTE}",`
